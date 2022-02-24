@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7753005267705294533}
   - component: {fileID: 7753005267705294532}
   - component: {fileID: 7753005267705294552}
+  - component: {fileID: -3093763929371254057}
   m_Layer: 0
   m_Name: SpherePlayer
   m_TagString: Untagged
@@ -112,3 +113,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-3093763929371254057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7753005267705294531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f1d5a2fb6420524d83d768e55994741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
+  rb: {fileID: 0}

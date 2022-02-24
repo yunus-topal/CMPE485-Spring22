@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class MovePlayer : MonoBehaviour
 {
-    public Rigidbody rb;
+    public Camera mainCamera;
+    public GameObject sphere;
     private float speed = 15f;
+    private Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
-        rb = GameObject.FindObjectOfType<Rigidbody>();
+        rb = sphere.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -21,6 +23,9 @@ public class MovePlayer : MonoBehaviour
 
         rb.AddForce(Vector3.right * verticalInput * Time.deltaTime * speed, ForceMode.Impulse);
         rb.AddForce(Vector3.back * horizontalInput * Time.deltaTime * speed, ForceMode.Impulse);
+
+        mainCamera.transform.position = new Vector3(rb.transform.position.x - 3, rb.transform.position.y + 10, rb.transform.position.z);
+
 
         // if (Input.GetKey(KeyCode.W))
         // {
