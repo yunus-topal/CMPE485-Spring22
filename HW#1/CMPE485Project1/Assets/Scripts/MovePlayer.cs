@@ -15,6 +15,30 @@ public class MovePlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.AddForce(Vector3.left * Time.deltaTime * speed, ForceMode.Impulse);
+
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        rb.AddForce(Vector3.right * verticalInput * Time.deltaTime * speed, ForceMode.Impulse);
+        rb.AddForce(Vector3.back * horizontalInput * Time.deltaTime * speed, ForceMode.Impulse);
+
+        // if (Input.GetKey(KeyCode.W))
+        // {
+        //     rb.AddForce(Vector3.right * Time.deltaTime * speed, ForceMode.Impulse);
+        // }
+        // if (Input.GetKey(KeyCode.S))
+        // {
+        //     rb.AddForce(Vector3.left * Time.deltaTime * speed, ForceMode.Impulse);
+        // }
+
+        // if (Input.GetKey(KeyCode.A))
+        // {
+        //     rb.AddForce(Vector3.forward * Time.deltaTime * speed, ForceMode.Impulse);
+        // }
+        // if (Input.GetKey(KeyCode.D))
+        // {
+        //     rb.AddForce(Vector3.back * Time.deltaTime * speed, ForceMode.Impulse);
+        // }
+
     }
 }
