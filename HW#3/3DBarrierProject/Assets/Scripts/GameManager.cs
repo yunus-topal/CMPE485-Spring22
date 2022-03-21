@@ -28,6 +28,11 @@ public class GameManager : MonoBehaviour
             goldPicked = true;
             Destroy(other.gameObject);
         }
+        else if (other.gameObject.tag == "Barrier")
+        {
+            gameOver = true;
+            Destroy(gameObject);
+        }
     }
 
     public bool getGameOver()

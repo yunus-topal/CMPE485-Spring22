@@ -11,24 +11,59 @@ public class BarrierMovement : MonoBehaviour
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
+        StartCoroutine(Move(2.0f));
     }
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.z > 10)
-        {
-            direction = -1f;
-            rb.velocity = new Vector3(0, 0, 0);
-        }
-        if (transform.position.z < -10)
-        {
-            direction = 1f;
-            rb.velocity = new Vector3(0, 0, 0);
-        }
-
-
-        rb.AddForce(Vector3.forward * direction * Time.deltaTime * speed, ForceMode.Impulse);
 
     }
+
+    // every 2 seconds perform the print()
+    private IEnumerator Move(float waitTime)
+    {
+        while (true)
+        {
+            while (transform.position.z < 10)
+            {
+                rb.AddForce(Vector3.forward * direction * Time.deltaTime * speed, ForceMode.Impulse);
+                yield return null;
+            }
+            rb.velocity = new Vector3(0, 0, 0);
+            direction = -1f;
+
+            float duration = Random.Range(1f, 2f);
+            yield return new WaitForSeconds(duration);
+
+            while (transform.position.z > -10)
+            {
+                rb.AddForce(Vector3.forward * direction * Time.deltaTime * speed, ForceMode.Impulse);
+                yield return null;
+            }
+            rb.velocity = new Vector3(0, 0, 0);
+            direction = 1f;
+
+            duration = Random.Range(1f, 2f);
+            yield return new WaitForSeconds(duration);
+        }
+    }
+
+    // without coroutines
+    // void Move()
+    // {
+    //     if (transform.position.z > 10)
+    //     {
+    //         direction = -1f;
+    //         rb.velocity = new Vector3(0, 0, 0);
+    //     }
+    //     if (transform.position.z < -10)
+    //     {
+    //         direction = 1f;
+    //         rb.velocity = new Vector3(0, 0, 0);
+    //     }
+
+    //     rb.AddForce(Vector3.forward * direction * Time.deltaTime * speed, ForceMode.Impulse);
+
+    // }
 
 }
