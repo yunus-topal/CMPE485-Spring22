@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public Button gameOverButton;
     private bool gameOver = false;
     private bool goldPicked = false;
     // Start is called before the first frame update
@@ -19,6 +21,8 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("You Won!");
             gameOver = true;
+            gameOverButton.gameObject.SetActive(true);
+
         }
     }
     private void OnCollisionEnter(Collision other)
