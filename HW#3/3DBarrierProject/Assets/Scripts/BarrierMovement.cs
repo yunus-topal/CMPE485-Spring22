@@ -7,6 +7,7 @@ public class BarrierMovement : MonoBehaviour
 
     public float speed = 100f;
     private Rigidbody rb;
+    private float direction = 1f;
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
@@ -14,11 +15,19 @@ public class BarrierMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        if (transform.position.z > 10)
+        {
+            direction = -1f;
+            rb.velocity = new Vector3(0, 0, 0);
+        }
+        if (transform.position.z < -10)
+        {
+            direction = 1f;
+            rb.velocity = new Vector3(0, 0, 0);
+        }
 
-        // rb.AddForce(Vector3.right * verticalInput * Time.deltaTime * speed, ForceMode.Impulse);
-        rb.AddForce(Vector3.forward * horizontalInput * Time.deltaTime * speed, ForceMode.Impulse);
+
+        rb.AddForce(Vector3.forward * direction * Time.deltaTime * speed, ForceMode.Impulse);
 
     }
 
