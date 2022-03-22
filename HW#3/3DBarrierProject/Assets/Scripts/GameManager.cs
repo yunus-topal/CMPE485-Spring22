@@ -5,11 +5,13 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject audioSource;
     public GameObject goldPrefab;
     public GameObject playerPrefab;
     public GameObject barrier1;
     public GameObject barrier2;
     public Button playButton;
+    public Text buttonText;
     public Text resultText;
     private bool gameOver = true;
     private bool goldPicked = true;
@@ -44,6 +46,7 @@ public class GameManager : MonoBehaviour
 
         playButton.gameObject.SetActive(false);
         resultText.gameObject.SetActive(false);
+        audioSource.GetComponent<AudioHandler>().startAudio();
 
     }
 
@@ -68,8 +71,11 @@ public class GameManager : MonoBehaviour
         barrier2.GetComponent<BarrierMovement>().stopBarriers();
 
         gameOver = true;
+        buttonText.text = "PLAY AGAIN";
         resultText.gameObject.SetActive(true);
         playButton.gameObject.SetActive(true);
+        audioSource.GetComponent<AudioHandler>().startAudio();
+
     }
     public bool getGoldPicked()
     {

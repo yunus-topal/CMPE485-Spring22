@@ -29,7 +29,7 @@ public class BarrierMovement : MonoBehaviour
     {
         while (true)
         {
-            while (transform.position.z < 10)
+            while (transform.position.z < 20)
             {
                 rb.AddForce(Vector3.forward * direction * Time.deltaTime * speed, ForceMode.Impulse);
                 yield return null;
@@ -40,7 +40,7 @@ public class BarrierMovement : MonoBehaviour
             float duration = Random.Range(1f, 2f);
             yield return new WaitForSeconds(duration);
 
-            while (transform.position.z > -10)
+            while (transform.position.z > 0)
             {
                 rb.AddForce(Vector3.forward * direction * Time.deltaTime * speed, ForceMode.Impulse);
                 yield return null;
