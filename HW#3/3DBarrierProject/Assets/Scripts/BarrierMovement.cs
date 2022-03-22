@@ -4,18 +4,13 @@ using UnityEngine;
 
 public class BarrierMovement : MonoBehaviour
 {
-
-    private GameObject manager;
-    private GameManager gm;
-
     private IEnumerator coroutine;
     public float speed = 100f;
     private Rigidbody rb;
     private float direction = 1f;
     void Start()
     {
-        manager = GameObject.FindWithTag("Manager");
-        gm = manager.GetComponent<GameManager>();
+
         rb = gameObject.GetComponent<Rigidbody>();
         coroutine = Move();
     }
