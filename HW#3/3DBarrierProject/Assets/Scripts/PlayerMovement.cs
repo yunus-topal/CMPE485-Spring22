@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private GameObject manager;
     private GameManager gm;
+    private GameObject treasure;
     private float speed = 20;
     // Start is called before the first frame update
     void Start()
@@ -28,22 +29,33 @@ public class PlayerMovement : MonoBehaviour
                 transform.position += new Vector3(-1f * speed * Time.deltaTime, 0, 0);
             }
 
+            if (Input.GetKey(KeyCode.E) && !gm.getGoldPicked())
+            {
+                pickTreasure();
+            }
+
             if (transform.position.x < -40 && gm.getGoldPicked())
             {
                 gm.setGameOver();
             }
+
+
         }
     }
-
-    private void OnCollisionEnter(Collision other)
+    private void pickTreasure()
     {
-        // pick up gold
-        if (other.gameObject.tag == "Treasure")
+        treasure = GameObject.FindWithTag("Treasure");
+        float distance = Vector3.Distance(treasure.transform.position, transform.position);
+        if (distance < 6)
         {
             gm.setGoldPicked(true);
-            Destroy(other.gameObject);
+            Destroy(treasure);
         }
-        else if (other.gameObject.tag == "Barrier")
+        Debug.Log("distance: " + distance);
+    }
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Barrier")
         {
             gm.setPlayerDead(true);
             gm.setGameOver();
