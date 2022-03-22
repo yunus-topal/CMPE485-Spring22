@@ -26,6 +26,7 @@ public class BarrierMovement : MonoBehaviour
     public void stopBarriers()
     {
         StopCoroutine(coroutine);
+        rb.velocity = new Vector3(0, 0, 0);
     }
 
     // every 2 seconds perform the print()

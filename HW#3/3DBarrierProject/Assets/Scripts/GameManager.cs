@@ -5,43 +5,46 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject goldPrefab;
+    public GameObject playerPrefab;
     public GameObject barrier1;
     public GameObject barrier2;
     public Button playButton;
     public Text resultText;
     private bool gameOver = true;
-    private bool goldPicked = false;
-    private bool playerDead = false;
+    private bool goldPicked = true;
+    private bool playerDead = true;
     private GameObject player;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindWithTag("Player");
         playButton.onClick.AddListener(startGame);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // if (goldPicked && transform.position.x < -40)
-        // {
-        //     Debug.Log("You Won!");
-        //     gameOver = true;
-        //     playButton.gameObject.SetActive(true);
-        //     resultText.text = "You Won!";
-        //     resultText.gameObject.SetActive(true);
-
-        // }
     }
 
     public void startGame()
     {
-        Debug.Log("Game is starting");
+        // reinitialize variables
+        gameOver = false;
+        if (goldPicked)
+        {
+            Instantiate(goldPrefab, new Vector3(0, 1f, 0), Quaternion.identity);
+            goldPicked = false;
+        }
+
+        if (playerDead)
+        {
+            Instantiate(playerPrefab, new Vector3(-40f, 2.5f, 0), Quaternion.identity);
+            player = GameObject.FindWithTag("Player");
+            playerDead = false;
+        }
         barrier1.GetComponent<BarrierMovement>().startBarriers();
         barrier2.GetComponent<BarrierMovement>().startBarriers();
-        gameOver = false;
+
+        playButton.gameObject.SetActive(false);
+        resultText.gameObject.SetActive(false);
+
     }
 
     public bool getGameOver()
@@ -60,11 +63,13 @@ public class GameManager : MonoBehaviour
             resultText.text = "You Won!";
             resultText.color = Color.green;
         }
-        resultText.gameObject.SetActive(true);
+
         barrier1.GetComponent<BarrierMovement>().stopBarriers();
         barrier2.GetComponent<BarrierMovement>().stopBarriers();
 
         gameOver = true;
+        resultText.gameObject.SetActive(true);
+        playButton.gameObject.SetActive(true);
     }
     public bool getGoldPicked()
     {

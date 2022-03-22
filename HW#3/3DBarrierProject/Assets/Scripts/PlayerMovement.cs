@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         // pick up gold
-        if (other.gameObject.name == "Gold")
+        if (other.gameObject.tag == "Treasure")
         {
             gm.setGoldPicked(true);
             Destroy(other.gameObject);
