@@ -5,9 +5,11 @@ using UnityEngine;
 public class BarrierMovement : MonoBehaviour
 {
     private IEnumerator coroutine;
-    public float speed = 100f;
+    private float speed = 100f;
     private Rigidbody rb;
     private float direction = 1f;
+    private float shorterDuration = 1f;
+    private float longerDuration = 2f;
     void Start()
     {
 
@@ -24,6 +26,18 @@ public class BarrierMovement : MonoBehaviour
         rb.velocity = new Vector3(0, 0, 0);
     }
 
+    public void setSpeed(float f)
+    {
+        speed = f;
+    }
+    public void setShorterDuration(float f)
+    {
+        shorterDuration = f;
+    }
+    public void setLongerDuration(float f)
+    {
+        longerDuration = f;
+    }
     // every 2 seconds perform the print()
     private IEnumerator Move()
     {
@@ -37,7 +51,7 @@ public class BarrierMovement : MonoBehaviour
             rb.velocity = new Vector3(0, 0, 0);
             direction = -1f;
 
-            float duration = Random.Range(1f, 2f);
+            float duration = Random.Range(shorterDuration, longerDuration);
             yield return new WaitForSeconds(duration);
 
             while (transform.position.z > 0)
@@ -48,7 +62,7 @@ public class BarrierMovement : MonoBehaviour
             rb.velocity = new Vector3(0, 0, 0);
             direction = 1f;
 
-            duration = Random.Range(1f, 2f);
+            duration = Random.Range(shorterDuration, longerDuration);
             yield return new WaitForSeconds(duration);
         }
     }
