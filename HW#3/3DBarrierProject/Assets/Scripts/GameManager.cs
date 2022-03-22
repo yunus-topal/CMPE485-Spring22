@@ -43,8 +43,9 @@ public class GameManager : MonoBehaviour
 
         if (playerDead)
         {
-            Instantiate(playerPrefab, new Vector3(-40f, 2.5f, 0), Quaternion.identity);
+            Instantiate(playerPrefab, new Vector3(-40f, 0, 0), Quaternion.identity);
             player = GameObject.FindWithTag("Player");
+            player.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
             playerDead = false;
         }
         barrier1.GetComponent<BarrierMovement>().startBarriers();
