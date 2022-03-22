@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private GameObject manager;
     private GameManager gm;
     private float speed = 10f;
     // Start is called before the first frame update
     void Start()
     {
-        gm = gameObject.GetComponent<GameManager>();
+        manager = GameObject.FindWithTag("Manager");
+        gm = manager.GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -25,6 +27,29 @@ public class PlayerMovement : MonoBehaviour
             {
                 transform.position += new Vector3(-1f * speed * Time.deltaTime, 0, 0);
             }
+
+            if (transform.position.x < -40 && gm.getGoldPicked())
+            {
+                gm.setGameOver();
+            }
         }
     }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        // pick up gold
+        if (other.gameObject.name == "Gold")
+        {
+            gm.setGoldPicked(true);
+            Destroy(other.gameObject);
+        }
+        else if (other.gameObject.tag == "Barrier")
+        {
+            gm.setPlayerDead(true);
+            gm.setGameOver();
+            Destroy(gameObject);
+
+        }
+    }
+
 }
