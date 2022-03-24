@@ -7,10 +7,12 @@ public class PlayerMovement : MonoBehaviour
     private GameObject manager;
     private GameManager gm;
     private GameObject treasure;
-    private float speed = 20;
+    private float speed = 50f;
+    private Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
+        rb = gameObject.GetComponent<Rigidbody>();
         manager = GameObject.FindWithTag("Manager");
         gm = manager.GetComponent<GameManager>();
     }
@@ -22,11 +24,14 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.W))
             {
-                transform.position += new Vector3(1f * speed * Time.deltaTime, 0, 0);
+                //transform.position += new Vector3(1f * speed * Time.deltaTime, 0, 0);
+                rb.AddForce(Vector3.right * Time.deltaTime * speed, ForceMode.Impulse);
             }
             if (Input.GetKey(KeyCode.S))
             {
-                transform.position += new Vector3(-1f * speed * Time.deltaTime, 0, 0);
+                //transform.position += new Vector3(-1f * speed * Time.deltaTime, 0, 0);
+                rb.AddForce(Vector3.left * Time.deltaTime * speed, ForceMode.Impulse);
+
             }
 
             if (Input.GetKey(KeyCode.E) && !gm.getGoldPicked())
@@ -36,7 +41,18 @@ public class PlayerMovement : MonoBehaviour
 
             if (transform.position.x < -40 && gm.getGoldPicked())
             {
+                rb.velocity = new Vector3(0, 0, 0);
                 gm.setGameOver();
+            }
+            if (transform.position.x > 45)
+            {
+                rb.velocity = new Vector3(0, 0, 0);
+                transform.position = new Vector3(45f, transform.position.y, transform.position.z);
+            }
+            if (transform.position.x < -45)
+            {
+                rb.velocity = new Vector3(0, 0, 0);
+                transform.position = new Vector3(-45f, transform.position.y, transform.position.z);
             }
 
 

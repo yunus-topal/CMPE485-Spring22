@@ -43,7 +43,7 @@ public class BarrierMovement : MonoBehaviour
     {
         while (true)
         {
-            while (transform.position.z < 20)
+            while (transform.position.z < 30)
             {
                 rb.AddForce(Vector3.forward * direction * Time.deltaTime * speed, ForceMode.Impulse);
                 yield return null;

@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         gameOver = false;
         if (goldPicked)
         {
-            Instantiate(goldPrefab, new Vector3(0, 1f, 0), Quaternion.identity);
+            Instantiate(goldPrefab, new Vector3(30f, 1f, 0), Quaternion.identity);
             goldPicked = false;
         }
 
