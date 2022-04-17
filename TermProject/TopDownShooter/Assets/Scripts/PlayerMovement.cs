@@ -6,10 +6,11 @@ public class PlayerMovement : MonoBehaviour
 {
     public Camera mainCamera;
     public float speed = 10f;
+    public Animator playerAnimator;
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -17,6 +18,15 @@ public class PlayerMovement : MonoBehaviour
     {
         float horizontalSpeed = Input.GetAxis("Horizontal");
         float verticalSpeed = Input.GetAxis("Vertical");
+        // switch between running and idle animation
+        if (horizontalSpeed != 0 || verticalSpeed != 0)
+        {
+            playerAnimator.SetFloat("speed_f",0.9f);
+        }
+        else
+        {
+            playerAnimator.SetFloat("speed_f",0f);
+        }
         
         transform.position += new Vector3(horizontalSpeed * Time.deltaTime * speed,0,verticalSpeed * Time.deltaTime * speed);
         // stay in z axis
