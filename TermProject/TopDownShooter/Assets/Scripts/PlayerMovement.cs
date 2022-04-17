@@ -6,8 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public Camera mainCamera;
     public float speed = 10f;
-    public Animator playerAnimator;
-    // Start is called before the first frame update
+    private Animator playerAnimator;
+// Start is called before the first frame update
     void Start()
     {
         playerAnimator = GetComponent<Animator>();
@@ -51,5 +51,11 @@ public class PlayerMovement : MonoBehaviour
             mainCamera.gameObject.transform.position = new Vector3(mainCamera.gameObject.transform.position.x,
                 mainCamera.gameObject.transform.position.y, transform.position.z);
         }
+
+  
+        Vector3 lookDir = mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+        transform.rotation = Quaternion.Euler(0f, -angle, 0f);
+        
     }
 }
