@@ -30,10 +30,10 @@ public class PlayerMovement : MonoBehaviour
         
         transform.position += new Vector3(horizontalSpeed * Time.deltaTime * speed,0,verticalSpeed * Time.deltaTime * speed);
         // stay in z axis
-        if (transform.position.z < mainCamera.gameObject.transform.position.z - 18)
+        if (transform.position.z < mainCamera.gameObject.transform.position.z - 15)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y,
-                mainCamera.gameObject.transform.position.z - 18);
+                mainCamera.gameObject.transform.position.z - 15);
         }
         
         // stay in x axis
@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
 
   
         Vector3 lookDir = mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+        float angle = Mathf.Atan2(lookDir.z, lookDir.x) * Mathf.Rad2Deg - 90f;
         transform.rotation = Quaternion.Euler(0f, -angle, 0f);
         
     }
