@@ -8,7 +8,7 @@ public class BulletMovement : MonoBehaviour
     private float speed = 40f;
     private Vector3 direction = new Vector3(1f,0f,1f);
     private Rigidbody rb;
-    private float lifeTime = 2f;
+    private float lifeTime = 1.75f;
 
 
     private void Update()
@@ -20,7 +20,16 @@ public class BulletMovement : MonoBehaviour
         }
     }
 
-    public void setAngle(float angle)
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
+    }
+
+    public void SetAngle(float angle)
     {
         rb = GetComponent<Rigidbody>();
         direction.z = Mathf.Cos(angle * Mathf.Deg2Rad);
