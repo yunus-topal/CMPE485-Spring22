@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public Camera mainCamera;
-    public float speed = 10f;
+    private float speed = 10f;
     private Animator playerAnimator;
 // Start is called before the first frame update
     void Start()
