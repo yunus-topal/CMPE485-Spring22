@@ -7,6 +7,12 @@ public class PlayerMovement : MonoBehaviour
     public Camera mainCamera;
     private float speed = 10f;
     private Animator playerAnimator;
+
+    private bool dashing = false;
+
+    private float dashingTime = 0.2f;
+
+    private float dashingCd = 0f;
 // Start is called before the first frame update
     void Start()
     {
@@ -16,19 +22,39 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CheckMovement();
+        StayInLine();
+        SetRotation();
+    }
+
+    void CheckMovement()
+    {
         float horizontalSpeed = Input.GetAxis("Horizontal");
         float verticalSpeed = Input.GetAxis("Vertical");
         // switch between running and idle animation
-        if (horizontalSpeed != 0 || verticalSpeed != 0)
+        if (!dashing)
         {
-            playerAnimator.SetFloat("speed_f",0.9f);
+            if (horizontalSpeed != 0 || verticalSpeed != 0)
+            {
+                playerAnimator.SetFloat("speed_f",0.9f);
+                if (Input.GetKeyDown(KeyCode.Space) && dashingCd <= 0)
+                {
+                    dashingCd = 1.0f;
+                    StartCoroutine(Dash(horizontalSpeed, verticalSpeed));
+                }
+                else
+                {
+                    transform.position += new Vector3(horizontalSpeed * Time.deltaTime * speed,0,verticalSpeed * Time.deltaTime * speed);
+                }
+            }
+            else
+            {
+                playerAnimator.SetFloat("speed_f",0f);
+            }
         }
-        else
-        {
-            playerAnimator.SetFloat("speed_f",0f);
-        }
-        
-        transform.position += new Vector3(horizontalSpeed * Time.deltaTime * speed,0,verticalSpeed * Time.deltaTime * speed);
+    }
+    void StayInLine()
+    {
         // stay in z axis
         if (transform.position.z < mainCamera.gameObject.transform.position.z - 15)
         {
@@ -51,11 +77,27 @@ public class PlayerMovement : MonoBehaviour
             mainCamera.gameObject.transform.position = new Vector3(mainCamera.gameObject.transform.position.x,
                 mainCamera.gameObject.transform.position.y, transform.position.z);
         }
-
-  
+    }
+    void SetRotation()
+    {
         Vector3 lookDir = mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         float angle = Mathf.Atan2(lookDir.z, lookDir.x) * Mathf.Rad2Deg - 90f;
         transform.rotation = Quaternion.Euler(0f, -angle, 0f);
-        
+        if (dashingCd > 0)
+        {
+            dashingCd -= Time.deltaTime;
+        }
+    }
+
+    IEnumerator Dash(float horizontalSpeed, float verticalSpeed)
+    {
+        dashing = true;
+        for (float f = 0; f < dashingTime; f += Time.deltaTime)
+        {
+            transform.position += new Vector3(horizontalSpeed * Time.deltaTime * speed * 5f,0,verticalSpeed * Time.deltaTime * speed * 5f);
+            yield return null;
+        }
+
+        dashing = false;
     }
 }
