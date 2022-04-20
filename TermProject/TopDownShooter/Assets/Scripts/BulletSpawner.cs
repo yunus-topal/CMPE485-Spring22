@@ -14,7 +14,7 @@ public class BulletSpawner : MonoBehaviour
         {
             if (coolDown <= 0f)
             {
-                GameObject bullet = Instantiate(bulletPrefab,new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z ), Quaternion.identity);
+                GameObject bullet = Instantiate(bulletPrefab,new Vector3(transform.position.x, 5f, transform.position.z ), Quaternion.identity);
                 bullet.GetComponent<PlayerBulletMovement>().SetAngle(transform.eulerAngles.y);
                 coolDown = 0.1f;
             }

@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class LockedinBulletMovement : MonoBehaviour
 {
-    private float speed = 20f;
+    private float speed = 10f;
     private Vector3 direction = new Vector3(1f,0f,-1f);
     private Rigidbody rb;
-    private float lifeTime = 3.0f;
-
+    private GameObject player;
+    private GameObject gameManager;
 
     // Update is called once per frame
     void Update()
     {
-        lifeTime -= Time.deltaTime;
-        if (lifeTime < 0)
+        if (!gameManager.GetComponent<GameManager>().GetGameOver())
         {
-            Destroy(gameObject);
+            // change direction of the bullet
+            Vector3 lookDir = player.transform.position - transform.position;
+            float angle = Mathf.Atan2(lookDir.z, lookDir.x) * Mathf.Rad2Deg - 90f;
+            SetVelocity(-angle);
         }
+        
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -31,9 +34,16 @@ public class LockedinBulletMovement : MonoBehaviour
     }
 
     
-    public void SetAngle(float angle)
+    public void Initialize(float angle, GameObject playerCharacter)
     {
+        gameManager = GameObject.FindWithTag("GameController");
+        player = playerCharacter;
         rb = GetComponent<Rigidbody>();
+        SetVelocity(angle);
+    }
+
+    private void SetVelocity(float angle)
+    {
         direction.z = Mathf.Cos(angle * Mathf.Deg2Rad);
         direction.x = Mathf.Sin(angle * Mathf.Deg2Rad);
         rb.velocity = direction * speed;

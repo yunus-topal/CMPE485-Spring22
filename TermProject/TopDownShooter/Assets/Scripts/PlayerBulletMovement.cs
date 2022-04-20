@@ -27,6 +27,11 @@ public class PlayerBulletMovement : MonoBehaviour
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
+        else if (collision.gameObject.CompareTag("LockedinBullet"))
+        {
+            Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
     }
 
     public void SetAngle(float angle)

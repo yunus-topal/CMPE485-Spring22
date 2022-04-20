@@ -14,31 +14,34 @@ public class EnemyMovement : MonoBehaviour
     {
         this.mainCamera = cam;
         player = GameObject.FindWithTag("Player");
-        InvokeRepeating(nameof(AttackPlayer),1.0f,1.0f);
-       
-    }
-
-    private void AttackPlayer()
-    {
         if (gameObject.transform.CompareTag("DefaultEnemy"))
         {
-            GameObject bullet = Instantiate(enemyBullet,new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z), Quaternion.identity);
-            bullet.GetComponent<EnemyBulletMovement>().SetAngle(transform.eulerAngles.y); 
-        }
-        else if (gameObject.transform.CompareTag("LockedinEnemy"))
+            InvokeRepeating(nameof(DefaultAttackPlayer),1.0f,1.0f);
+        } else if(gameObject.transform.CompareTag("LockedinEnemy"))
         {
-            GameObject bullet = Instantiate(lockedInBullet,new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z), Quaternion.identity);
-            bullet.GetComponent<LockedinBulletMovement>().SetAngle(transform.eulerAngles.y); 
+            InvokeRepeating(nameof(LockedinAttackPlayer),2.0f,2.0f);
+
         }
     }
-    
-    
+
+    private void DefaultAttackPlayer()
+    {
+        GameObject bullet = Instantiate(enemyBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
+        bullet.GetComponent<EnemyBulletMovement>().SetAngle(transform.eulerAngles.y); 
+    }
+
+    private void LockedinAttackPlayer()
+    {
+        GameObject bullet = Instantiate(lockedInBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
+        bullet.GetComponent<LockedinBulletMovement>().Initialize(transform.eulerAngles.y, player); 
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (GameObject.FindWithTag("GameController").GetComponent<GameManager>().GetGameOver())
         {
-            CancelInvoke(nameof(AttackPlayer));
+            CancelInvoke();
         }
         else
         {

@@ -5,12 +5,12 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public Camera mainCamera;
-    private float speed = 10f;
+    private float speed = 15f;
     private Animator playerAnimator;
 
     private bool dashing = false;
 
-    private float dashingTime = 0.2f;
+    private float dashingTime = 0.15f;
 
     private float dashingCd = 0f;
 // Start is called before the first frame update

@@ -8,6 +8,7 @@ TagManager:
   - DefaultEnemy
   - LockedinEnemy
   - RunnerEnemy
+  - LockedinBullet
   layers:
   - Default
   - TransparentFX
