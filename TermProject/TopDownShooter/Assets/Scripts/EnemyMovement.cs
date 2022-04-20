@@ -8,19 +8,30 @@ public class EnemyMovement : MonoBehaviour
     private float speed = 10f;
     private GameObject player;
     public GameObject enemyBullet;
+    public GameObject lockedInBullet;
     
     public void SetCamera(Camera cam)
     {
         this.mainCamera = cam;
         player = GameObject.FindWithTag("Player");
         InvokeRepeating(nameof(AttackPlayer),1.0f,1.0f);
+       
     }
 
     private void AttackPlayer()
     {
-        GameObject bullet = Instantiate(enemyBullet,new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z), Quaternion.identity);
-        bullet.GetComponent<EnemyBulletMovement>().SetAngle(transform.eulerAngles.y);
+        if (gameObject.transform.CompareTag("DefaultEnemy"))
+        {
+            GameObject bullet = Instantiate(enemyBullet,new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z), Quaternion.identity);
+            bullet.GetComponent<EnemyBulletMovement>().SetAngle(transform.eulerAngles.y); 
+        }
+        else if (gameObject.transform.CompareTag("LockedinEnemy"))
+        {
+            GameObject bullet = Instantiate(lockedInBullet,new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z), Quaternion.identity);
+            bullet.GetComponent<LockedinBulletMovement>().SetAngle(transform.eulerAngles.y); 
+        }
     }
+    
     
     // Update is called once per frame
     void Update()

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public Camera mainCamera;
-    public GameObject enemyPrefab;
+    public GameObject[] enemies;
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +16,8 @@ public class EnemySpawner : MonoBehaviour
     void SpawnEnemy()
     {
         float xRandom = Random.Range(-20f, 20f);
-        GameObject enemy = Instantiate(enemyPrefab, new Vector3(xRandom, 3f,mainCamera.transform.position.z + 25f), Quaternion.identity);
+        int random = Random.Range(0,enemies.Length);
+        GameObject enemy = Instantiate(enemies[random], new Vector3(xRandom, 3f,mainCamera.transform.position.z + 25f), Quaternion.identity);
         enemy.GetComponent<EnemyMovement>().SetCamera(mainCamera);
     }
     // Update is called once per frame
