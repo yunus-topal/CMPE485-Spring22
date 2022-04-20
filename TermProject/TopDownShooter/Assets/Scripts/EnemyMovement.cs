@@ -39,7 +39,8 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameObject.FindWithTag("GameController").GetComponent<GameManager>().GetGameOver())
+        GameObject gameManager = GameObject.FindWithTag("GameController");
+        if (gameManager.GetComponent<GameManager>().GetGameOver() || gameManager.GetComponent<GameManager>().GetBossPhase())
         {
             CancelInvoke();
         }

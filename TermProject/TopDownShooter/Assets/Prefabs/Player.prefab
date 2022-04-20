@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7410537174402431778}
   - component: {fileID: 7410537174402431779}
   - component: {fileID: 7410537174402431782}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,4 +126,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
-  speed: 10

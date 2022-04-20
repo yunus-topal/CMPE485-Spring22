@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 741545315305228781}
   - component: {fileID: 741545315305228780}
   - component: {fileID: 741545315305228776}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LockedinEnemy
   m_TagString: LockedinEnemy
   m_Icon: {fileID: 0}

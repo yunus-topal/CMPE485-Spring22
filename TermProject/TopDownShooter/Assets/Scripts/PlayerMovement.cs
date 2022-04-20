@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     private float dashingTime = 0.15f;
 
     private float dashingCd = 0f;
+
+    private bool bossFightStart = false;
 // Start is called before the first frame update
     void Start()
     {
@@ -22,11 +24,27 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!bossFightStart)
+        {
+            bossFightStart = CheckBossPhase();
+        }
         CheckMovement();
         StayInLine();
         SetRotation();
     }
 
+    bool CheckBossPhase()
+    {
+        float offset = mainCamera.transform.position.z - 130f;
+        if (offset >= 0)
+        {
+            mainCamera.transform.position -= new Vector3(0,0,offset);
+            GameObject.FindWithTag("GameController").GetComponent<GameManager>().SetBossPhase(true);
+            return true;
+        }
+
+        return false;
+    }
     void CheckMovement()
     {
         float horizontalSpeed = Input.GetAxis("Horizontal");
@@ -72,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position = new Vector3(-25f, transform.position.y, transform.position.z);
         }
         // move camera if player moves too far
-        if (transform.position.z > mainCamera.gameObject.transform.position.z)
+        if (transform.position.z > mainCamera.gameObject.transform.position.z && !bossFightStart)
         {
             mainCamera.gameObject.transform.position = new Vector3(mainCamera.gameObject.transform.position.x,
                 mainCamera.gameObject.transform.position.y, transform.position.z);

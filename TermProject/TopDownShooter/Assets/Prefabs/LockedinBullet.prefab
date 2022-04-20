@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5936937923656860797}
   - component: {fileID: 6108523994497119869}
   - component: {fileID: -4522520235170094914}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LockedinBullet
   m_TagString: LockedinBullet
   m_Icon: {fileID: 0}
