@@ -43,6 +43,10 @@ public class EnemyMovement : MonoBehaviour
         {
             CancelInvoke();
         }
+        else if (player.transform.position.z - transform.position.z > 30f)
+        {
+            Destroy(gameObject);
+        }
         else
         {
             // get in the scene and attack player.
