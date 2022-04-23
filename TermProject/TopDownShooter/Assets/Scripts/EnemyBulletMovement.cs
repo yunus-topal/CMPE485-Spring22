@@ -8,13 +8,13 @@ public class EnemyBulletMovement : MonoBehaviour
     private Vector3 direction = new Vector3(1f,0f,-1f);
     private Rigidbody rb;
     private float lifeTime = 3.0f;
-
+    private GameObject gameManager;
 
     // Update is called once per frame
     void Update()
     {
         lifeTime -= Time.deltaTime;
-        if (lifeTime < 0)
+        if (lifeTime < 0  || gameManager.GetComponent<GameManager>().GetBossPhase())
         {
             Destroy(gameObject);
         }
@@ -24,16 +24,21 @@ public class EnemyBulletMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            GameObject.FindWithTag("GameController").GetComponent<GameManager>().SetGameOver(true);
+            gameManager.GetComponent<GameManager>().SetGameOver(true);
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
     }
 
-    
+    public void Initialize(float angle)
+    {
+        gameManager = GameObject.FindWithTag("GameController");
+        rb = GetComponent<Rigidbody>();
+        SetAngle(angle);
+    }
     public void SetAngle(float angle)
     {
-        rb = GetComponent<Rigidbody>();
+        
         direction.z = Mathf.Cos(angle * Mathf.Deg2Rad);
         direction.x = Mathf.Sin(angle * Mathf.Deg2Rad);
         rb.velocity = direction * speed;

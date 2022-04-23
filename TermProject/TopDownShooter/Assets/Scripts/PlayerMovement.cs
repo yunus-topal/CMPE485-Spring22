@@ -14,32 +14,39 @@ public class PlayerMovement : MonoBehaviour
 
     private float dashingCd = 0f;
 
-    private bool bossFightStart = false;
+    private GameObject gameManager;
+
 // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.FindWithTag("GameController");
         playerAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!bossFightStart)
+        bool bossPhase = gameManager.GetComponent<GameManager>().GetBossPhase();
+        if (!bossPhase)
         {
-            bossFightStart = CheckBossPhase();
+            CheckBossPhase();
+        }else if (gameManager.GetComponent<GameManager>().GetBossTransition() >= 0)
+        {
+            return;
         }
         CheckMovement();
-        StayInLine();
+        StayInLine(bossPhase);
         SetRotation();
     }
 
     bool CheckBossPhase()
     {
-        float offset = mainCamera.transform.position.z - 130f;
+        float offset = mainCamera.transform.position.z - 125f;
         if (offset >= 0)
         {
             mainCamera.transform.position -= new Vector3(0,0,offset);
-            GameObject.FindWithTag("GameController").GetComponent<GameManager>().SetBossPhase(true);
+            gameManager.GetComponent<GameManager>().SetBossPhase();
+            playerAnimator.SetFloat("speed_f",0f);
             return true;
         }
 
@@ -71,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-    void StayInLine()
+    void StayInLine(bool bossPhase)
     {
         // stay in z axis
         if (transform.position.z < mainCamera.gameObject.transform.position.z - 15)
@@ -90,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position = new Vector3(-25f, transform.position.y, transform.position.z);
         }
         // move camera if player moves too far
-        if (transform.position.z > mainCamera.gameObject.transform.position.z && !bossFightStart)
+        if (transform.position.z > mainCamera.gameObject.transform.position.z && !bossPhase)
         {
             mainCamera.gameObject.transform.position = new Vector3(mainCamera.gameObject.transform.position.x,
                 mainCamera.gameObject.transform.position.y, transform.position.z);

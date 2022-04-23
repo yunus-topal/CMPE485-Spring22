@@ -9,6 +9,7 @@ public class LockedinBulletMovement : MonoBehaviour
     private Rigidbody rb;
     private GameObject player;
     private GameObject gameManager;
+    private float lifeTime = 5.0f;
 
     // Update is called once per frame
     void Update()
@@ -19,6 +20,11 @@ public class LockedinBulletMovement : MonoBehaviour
             Vector3 lookDir = player.transform.position - transform.position;
             float angle = Mathf.Atan2(lookDir.z, lookDir.x) * Mathf.Rad2Deg - 90f;
             SetVelocity(-angle);
+        }
+        lifeTime -= Time.deltaTime;
+        if (lifeTime <= 0 || gameManager.GetComponent<GameManager>().GetBossPhase())
+        {
+            Destroy(gameObject);
         }
         
     }

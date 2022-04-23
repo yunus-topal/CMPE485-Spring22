@@ -9,8 +9,8 @@ public class EnemyMovement : MonoBehaviour
     private GameObject player;
     public GameObject enemyBullet;
     public GameObject lockedInBullet;
-    
-    public void SetCamera(Camera cam)
+
+    public void Initialize(Camera cam)
     {
         this.mainCamera = cam;
         player = GameObject.FindWithTag("Player");
@@ -27,7 +27,7 @@ public class EnemyMovement : MonoBehaviour
     private void DefaultAttackPlayer()
     {
         GameObject bullet = Instantiate(enemyBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
-        bullet.GetComponent<EnemyBulletMovement>().SetAngle(transform.eulerAngles.y); 
+        bullet.GetComponent<EnemyBulletMovement>().Initialize(transform.eulerAngles.y); 
     }
 
     private void LockedinAttackPlayer()
@@ -40,13 +40,13 @@ public class EnemyMovement : MonoBehaviour
     void Update()
     {
         GameObject gameManager = GameObject.FindWithTag("GameController");
-        if (gameManager.GetComponent<GameManager>().GetGameOver() || gameManager.GetComponent<GameManager>().GetBossPhase())
+        if (gameManager.GetComponent<GameManager>().GetGameOver())
         {
             CancelInvoke();
         }
-        else if (player.transform.position.z - transform.position.z > 30f)
+        else if (player.transform.position.z - transform.position.z > 30f  || gameManager.GetComponent<GameManager>().GetBossPhase())
         {
-            Destroy(gameObject);
+            DestroyImmediate(gameObject);
         }
         else
         {

@@ -18,12 +18,12 @@ public class EnemySpawner : MonoBehaviour
         float xRandom = Random.Range(-20f, 20f);
         int random = Random.Range(0,enemies.Length);
         GameObject enemy = Instantiate(enemies[random], new Vector3(xRandom, 3f,mainCamera.transform.position.z + 25f), Quaternion.identity);
-        enemy.GetComponent<EnemyMovement>().SetCamera(mainCamera);
+        enemy.GetComponent<EnemyMovement>().Initialize(mainCamera);
     }
     // Update is called once per frame
     void Update()
     {
-        if (GameObject.FindWithTag("GameController").GetComponent<GameManager>().GetGameOver())
+        if (GameObject.FindWithTag("GameController").GetComponent<GameManager>().GetGameOver()  || GameObject.FindWithTag("GameController").GetComponent<GameManager>().GetBossPhase())
         {
             CancelInvoke(nameof(SpawnEnemy));
         }

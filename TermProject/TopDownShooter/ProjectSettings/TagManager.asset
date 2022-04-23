@@ -9,6 +9,7 @@ TagManager:
   - LockedinEnemy
   - RunnerEnemy
   - LockedinBullet
+  - Boss
   layers:
   - Default
   - TransparentFX
