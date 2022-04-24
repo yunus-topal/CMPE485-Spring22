@@ -10,6 +10,7 @@ public class EnemyMovement : MonoBehaviour
     public GameObject enemyBullet;
     public GameObject lockedInBullet;
     private Animator enemyAnimator;
+    private bool isDying = false;
 
     public void Initialize(Camera cam)
     {
@@ -29,10 +30,11 @@ public class EnemyMovement : MonoBehaviour
 
     private IEnumerator DefaultAttackPlayer()
     {
-        while (true)
+        while (!isDying)
         {
             enemyAnimator.SetTrigger("attack_trig");
             yield return new WaitForSeconds(0.25f);
+            if(isDying) break;
             GameObject bullet = Instantiate(enemyBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
             bullet.GetComponent<EnemyBulletMovement>().Initialize(transform.eulerAngles.y); 
             yield return new WaitForSeconds(0.75f);
@@ -41,15 +43,24 @@ public class EnemyMovement : MonoBehaviour
 
     private IEnumerator LockedinAttackPlayer()
     {
-        while (true)
+        while (!isDying)
         {
             enemyAnimator.SetTrigger("attack_trig");
             yield return new WaitForSeconds(0.75f);
+            if(isDying) break;
             GameObject bullet = Instantiate(lockedInBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
             bullet.GetComponent<LockedinBulletMovement>().Initialize(transform.eulerAngles.y, player);
             yield return new WaitForSeconds(1.25f);
         }
 
+    }
+
+    public IEnumerator DestroySelf()
+    {
+        isDying = true;
+        enemyAnimator.SetTrigger("die_trig");
+        yield return new WaitForSeconds(1f);
+        Destroy(gameObject);
     }
 
     // Update is called once per frame
@@ -58,11 +69,11 @@ public class EnemyMovement : MonoBehaviour
         GameObject gameManager = GameObject.FindWithTag("GameController");
         if (gameManager.GetComponent<GameManager>().GetGameOver())
         {
-            CancelInvoke();
+            StopAllCoroutines();
         }
         else if (player.transform.position.z - transform.position.z > 30f  || gameManager.GetComponent<GameManager>().GetBossPhase())
         {
-            DestroyImmediate(gameObject);
+            StartCoroutine(DestroySelf());
         }
         else
         {

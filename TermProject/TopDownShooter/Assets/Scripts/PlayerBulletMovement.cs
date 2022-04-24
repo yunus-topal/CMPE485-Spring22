@@ -24,7 +24,7 @@ public class PlayerBulletMovement : MonoBehaviour
     {
         if (collision.gameObject.tag.Contains("Enemy"))
         {
-            Destroy(collision.gameObject);
+            collision.gameObject.GetComponent<EnemyMovement>().StartCoroutine(collision.gameObject.GetComponent<EnemyMovement>().DestroySelf());
             Destroy(gameObject);
         }
         else if (collision.gameObject.CompareTag("LockedinBullet"))
