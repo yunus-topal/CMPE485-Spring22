@@ -20,6 +20,10 @@ public class BossMovement : MonoBehaviour
 
     }
 
+    private void SpawnMinions()
+    {
+        
+    }
     public IEnumerator StartEntrance()
     {
         float time = gameManager.GetComponent<GameManager>().GetBossTransition();
@@ -30,5 +34,6 @@ public class BossMovement : MonoBehaviour
             yield return null;
         }
         bossAnimator.SetTrigger("on_place_trig");
+        SpawnMinions();
     }
 }

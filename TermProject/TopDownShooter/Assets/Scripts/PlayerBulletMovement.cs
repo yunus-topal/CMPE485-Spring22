@@ -22,7 +22,12 @@ public class PlayerBulletMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag.Contains("Enemy"))
+        if (collision.gameObject.CompareTag("SkeletonEnemy"))
+        {
+            collision.gameObject.GetComponent<SkeletonEnemyMovement>().StartCoroutine(collision.gameObject.GetComponent<SkeletonEnemyMovement>().DestroySelf());
+            Destroy(gameObject);
+        }
+        else if (collision.gameObject.tag.Contains("Enemy"))
         {
             collision.gameObject.GetComponent<EnemyMovement>().StartCoroutine(collision.gameObject.GetComponent<EnemyMovement>().DestroySelf());
             Destroy(gameObject);
