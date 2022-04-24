@@ -2363,9 +2363,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c553d1276c4aa3642919c4aa51d27fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyBullet: {fileID: 7908351322229373366, guid: 7db7ed74fa971ce459c74dc2d2b5d371, type: 3}
-  lockedInBullet: {fileID: 5936937923656860784, guid: 4c5ddb8f46d84dd43a4ef5c8fb94d4ee, type: 3}
-  enemyAnimator: {fileID: 0}
+  enemyBullet: {fileID: 7624496878921423553, guid: 7ba892263bec55a45b3073eb74e7dc9a, type: 3}
+  lockedInBullet: {fileID: 947250871755532473, guid: 473d079eb020ad24184a63656bf54144, type: 3}
 --- !u!1 &1956949540428108
 GameObject:
   m_ObjectHideFlags: 0
