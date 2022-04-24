@@ -65,6 +65,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47b0a58c9e7aff045bc053d27f280811, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skeletonPrefab: {fileID: 1812659917213882, guid: 705458a9eac3ae740932e6aa33f3ca89, type: 3}
 --- !u!1 &1287031508511634960
 GameObject:
   m_ObjectHideFlags: 0

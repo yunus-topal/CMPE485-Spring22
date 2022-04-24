@@ -7,6 +7,10 @@ public class BossMovement : MonoBehaviour
     private GameObject gameManager;
 
     private Animator bossAnimator;
+
+    private bool isAlive = true;
+
+    public GameObject skeletonPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,9 +24,23 @@ public class BossMovement : MonoBehaviour
 
     }
 
-    private void SpawnMinions()
+    private IEnumerator SpawnMinions()
     {
-        
+        while (isAlive)
+        {
+            yield return new WaitForSeconds(1f);
+            bossAnimator.SetTrigger("spawn_trig");
+            yield return new WaitForSeconds(1f);
+            SpawnSkeletons();
+            yield return new WaitForSeconds(3f);
+        }
+    }
+
+    private void SpawnSkeletons()
+    {
+        //spawn 2 skeletons
+        Instantiate(skeletonPrefab,new Vector3(-10,0,100f),Quaternion.identity);
+        Instantiate(skeletonPrefab,new Vector3(10,0,100f),Quaternion.identity);
     }
     public IEnumerator StartEntrance()
     {
@@ -34,6 +52,6 @@ public class BossMovement : MonoBehaviour
             yield return null;
         }
         bossAnimator.SetTrigger("on_place_trig");
-        SpawnMinions();
+        StartCoroutine(SpawnMinions());
     }
 }

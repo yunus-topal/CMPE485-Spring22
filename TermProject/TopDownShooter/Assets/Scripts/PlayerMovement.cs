@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
             CheckBossPhase();
         }else if (gameManager.GetComponent<GameManager>().GetBossTransition() >= 0)
         {
+            playerAnimator.SetFloat("speed_f",0f);
             return;
         }
         CheckMovement();
@@ -46,7 +47,6 @@ public class PlayerMovement : MonoBehaviour
         {
             mainCamera.transform.position -= new Vector3(0,0,offset);
             gameManager.GetComponent<GameManager>().SetBossPhase();
-            playerAnimator.SetFloat("speed_f",0f);
             return true;
         }
 
