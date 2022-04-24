@@ -9,31 +9,47 @@ public class EnemyMovement : MonoBehaviour
     private GameObject player;
     public GameObject enemyBullet;
     public GameObject lockedInBullet;
+    private Animator enemyAnimator;
 
     public void Initialize(Camera cam)
     {
         this.mainCamera = cam;
+        enemyAnimator = gameObject.GetComponent<Animator>();
         player = GameObject.FindWithTag("Player");
         if (gameObject.transform.CompareTag("DefaultEnemy"))
         {
-            InvokeRepeating(nameof(DefaultAttackPlayer),1.0f,1.0f);
+            //InvokeRepeating(nameof(DefaultAttackPlayer),1.0f,1.0f);
+            StartCoroutine(DefaultAttackPlayer());
         } else if(gameObject.transform.CompareTag("LockedinEnemy"))
         {
-            InvokeRepeating(nameof(LockedinAttackPlayer),2.0f,2.0f);
-
+            //InvokeRepeating(nameof(LockedinAttackPlayer),2.0f,2.0f);
+            StartCoroutine(LockedinAttackPlayer());
         }
     }
 
-    private void DefaultAttackPlayer()
+    private IEnumerator DefaultAttackPlayer()
     {
-        GameObject bullet = Instantiate(enemyBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
-        bullet.GetComponent<EnemyBulletMovement>().Initialize(transform.eulerAngles.y); 
+        while (true)
+        {
+            enemyAnimator.SetTrigger("attack_trig");
+            yield return new WaitForSeconds(0.25f);
+            GameObject bullet = Instantiate(enemyBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
+            bullet.GetComponent<EnemyBulletMovement>().Initialize(transform.eulerAngles.y); 
+            yield return new WaitForSeconds(0.75f);
+        }
     }
 
-    private void LockedinAttackPlayer()
+    private IEnumerator LockedinAttackPlayer()
     {
-        GameObject bullet = Instantiate(lockedInBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
-        bullet.GetComponent<LockedinBulletMovement>().Initialize(transform.eulerAngles.y, player); 
+        while (true)
+        {
+            enemyAnimator.SetTrigger("attack_trig");
+            yield return new WaitForSeconds(0.75f);
+            GameObject bullet = Instantiate(lockedInBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
+            bullet.GetComponent<LockedinBulletMovement>().Initialize(transform.eulerAngles.y, player);
+            yield return new WaitForSeconds(1.25f);
+        }
+
     }
 
     // Update is called once per frame

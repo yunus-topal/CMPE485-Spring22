@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     private bool gameOver = false;
     private bool bossPhase = false;
-    private float bossTransition = 2.0f;
+    private float bossTransition = 5.0f;
     
     private void Update()
     {
