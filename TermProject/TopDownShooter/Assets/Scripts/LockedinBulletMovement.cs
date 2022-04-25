@@ -10,6 +10,7 @@ public class LockedinBulletMovement : MonoBehaviour
     private GameObject player;
     private GameObject gameManager;
     private float lifeTime = 5.0f;
+    public GameObject explosion;
 
     // Update is called once per frame
     void Update()
@@ -34,6 +35,7 @@ public class LockedinBulletMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             GameObject.FindWithTag("GameController").GetComponent<GameManager>().SetGameOver(true);
+            Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }

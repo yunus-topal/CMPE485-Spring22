@@ -9,6 +9,7 @@ public class EnemyBulletMovement : MonoBehaviour
     private Rigidbody rb;
     private float lifeTime = 3.0f;
     private GameObject gameManager;
+    public GameObject explosion;
 
     // Update is called once per frame
     void Update()
@@ -25,6 +26,7 @@ public class EnemyBulletMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             gameManager.GetComponent<GameManager>().SetGameOver(true);
+            Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
