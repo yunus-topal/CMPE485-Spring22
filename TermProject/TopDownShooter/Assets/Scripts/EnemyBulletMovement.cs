@@ -25,9 +25,9 @@ public class EnemyBulletMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            gameManager.GetComponent<GameManager>().SetGameOver(true);
+            //gameManager.GetComponent<GameManager>().SetGameOver(true);
             Instantiate(explosion, transform.position, Quaternion.identity);
-            Destroy(collision.gameObject);
+            //Destroy(collision.gameObject);
             Destroy(gameObject);
         }
     }
