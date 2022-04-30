@@ -9,6 +9,7 @@ public class BossMovement : MonoBehaviour
     private Animator bossAnimator;
 
     private bool isAlive = true;
+    private int hp = 5;
 
     public GameObject skeletonPrefab;
     // Start is called before the first frame update
@@ -16,12 +17,6 @@ public class BossMovement : MonoBehaviour
     {
         gameManager = GameObject.FindWithTag("GameController");
         bossAnimator = gameObject.GetComponent<Animator>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private IEnumerator SpawnMinions()
@@ -53,5 +48,23 @@ public class BossMovement : MonoBehaviour
         }
         bossAnimator.SetTrigger("on_place_trig");
         StartCoroutine(SpawnMinions());
+    }
+    
+    private IEnumerator DestroySelf()
+    {
+        StopCoroutine(SpawnMinions());
+        bossAnimator.SetTrigger("die_trig");
+        yield return new WaitForSeconds(1f);
+        Destroy(gameObject);
+    }
+    
+    public void TakeDamage()
+    {
+        hp -= 1;
+        if (hp <= 0)
+        {
+            StartCoroutine(DestroySelf());
+            gameManager.GetComponent<GameManager>().IncreaseScore(tag);
+        }
     }
 }

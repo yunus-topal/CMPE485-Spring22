@@ -59,13 +59,15 @@ public class DogKnightAction : MonoBehaviour
         {
             if (hitEnemy.gameObject.CompareTag("SkeletonEnemy") || hitEnemy.gameObject.CompareTag("KnightEnemy"))
             {
-                hitEnemy.gameObject.GetComponent<SkeletonEnemyMovement>().StartCoroutine(hitEnemy.gameObject.GetComponent<SkeletonEnemyMovement>().DestroySelf());
-                gameManager.GetComponent<GameManager>().IncreaseScore(hitEnemy.gameObject.tag);
+                hitEnemy.gameObject.GetComponent<SkeletonEnemyMovement>().TakeDamage();
             }
             else if (hitEnemy.gameObject.tag.Contains("Enemy"))
             {
-                hitEnemy.gameObject.GetComponent<EnemyMovement>().StartCoroutine(hitEnemy.gameObject.GetComponent<EnemyMovement>().DestroySelf());
-                gameManager.GetComponent<GameManager>().IncreaseScore(hitEnemy.gameObject.tag);
+                hitEnemy.gameObject.GetComponent<EnemyMovement>().TakeDamage();
+            }
+            else if (hitEnemy.gameObject.tag.Contains("Boss"))
+            {
+                hitEnemy.gameObject.GetComponent<BossMovement>().TakeDamage();
             }
         }
     }

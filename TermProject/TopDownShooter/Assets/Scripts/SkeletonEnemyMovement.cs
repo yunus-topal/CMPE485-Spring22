@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class SkeletonEnemyMovement : MonoBehaviour
 {
+    public GameObject attackPoint;
+    private float attackRange = 5f;
+    public LayerMask enemyLayers;
+    private int hp = 1;
     private GameObject player;
     private Vector3 direction = new Vector3(1f,0f,-1f);
     private Rigidbody rb;
@@ -28,6 +32,7 @@ public class SkeletonEnemyMovement : MonoBehaviour
     {
         if (!gameManager.GetComponent<GameManager>().GetGameOver() && !isAttacking && !isDying)
         {
+            skeletonAnimator.SetFloat("speed_f",0.7f);
             Vector3 lookDir = player.transform.position - transform.position;
             float angle = Mathf.Atan2(lookDir.z, lookDir.x) * Mathf.Rad2Deg - 90f;
             SetVelocity(-angle);
@@ -57,15 +62,34 @@ public class SkeletonEnemyMovement : MonoBehaviour
     {
         isAttacking = true;
         rb.velocity = new Vector3(0, 0, 0);
+        skeletonAnimator.SetFloat("speed_f",0f);
         skeletonAnimator.SetTrigger("attack_trig");
         yield return new WaitForSeconds(1.1f);
+        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.transform.position, attackRange, enemyLayers);
+        foreach (Collider hitEnemy in hitEnemies)    
+        {
+            if (hitEnemy.gameObject.CompareTag("Player"))
+            {
+                Debug.Log("Hit the player");
+            }
+        }
         isAttacking = false;
     }
-    public IEnumerator DestroySelf()
+    private IEnumerator DestroySelf()
     {
         isDying = true;
         skeletonAnimator.SetTrigger("die_trig");
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
+    }
+
+    public void TakeDamage()
+    {
+        hp -= 1;
+        if (hp <= 0)
+        {
+            StartCoroutine(DestroySelf());
+            gameManager.GetComponent<GameManager>().IncreaseScore(tag);
+        }
     }
 }

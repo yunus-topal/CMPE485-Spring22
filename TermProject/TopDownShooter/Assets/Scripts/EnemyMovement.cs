@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    private int hp = 1;
+    private GameObject gameManager;
     private Camera mainCamera;
     private float speed = 10f;
     private GameObject player;
@@ -14,7 +16,8 @@ public class EnemyMovement : MonoBehaviour
 
     public void Initialize(Camera cam)
     {
-        this.mainCamera = cam;
+        mainCamera = cam;
+        gameManager = GameObject.FindWithTag("GameController");
         enemyAnimator = gameObject.GetComponent<Animator>();
         player = GameObject.FindWithTag("Player");
         if (gameObject.transform.CompareTag("DefaultEnemy"))
@@ -55,7 +58,7 @@ public class EnemyMovement : MonoBehaviour
 
     }
 
-    public IEnumerator DestroySelf()
+    private IEnumerator DestroySelf()
     {
         isDying = true;
         enemyAnimator.SetTrigger("die_trig");
@@ -86,6 +89,15 @@ public class EnemyMovement : MonoBehaviour
         }
 
         
+    }
+    public void TakeDamage()
+    {
+        hp -= 1;
+        if (hp <= 0)
+        {
+            StartCoroutine(DestroySelf());
+            gameManager.GetComponent<GameManager>().IncreaseScore(tag);
+        }
     }
     
 }
