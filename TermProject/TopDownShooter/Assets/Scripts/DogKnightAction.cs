@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class DogKnightAction : MonoBehaviour
 {
+    private GameObject gameManager;
     public float coolDown = 0f;
     public GameObject attackPoint;
     private float attackRange = 5f;
@@ -14,6 +15,7 @@ public class DogKnightAction : MonoBehaviour
 
     private void Start()
     {
+        gameManager = GameObject.FindWithTag("GameController");
         dogAnimator = gameObject.GetComponent<Animator>();
         movementScript = gameObject.GetComponent<DogKnightMovement>();
     }
@@ -53,15 +55,17 @@ public class DogKnightAction : MonoBehaviour
         coolDown = 0.3f;
         yield return new WaitForSeconds(0.2f);
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.transform.position, attackRange, enemyLayers);
-        foreach (Collider collider in hitEnemies)    
+        foreach (Collider hitEnemy in hitEnemies)    
         {
-            if (collider.gameObject.CompareTag("SkeletonEnemy"))
+            if (hitEnemy.gameObject.CompareTag("SkeletonEnemy") || hitEnemy.gameObject.CompareTag("KnightEnemy"))
             {
-                collider.gameObject.GetComponent<SkeletonEnemyMovement>().StartCoroutine(collider.gameObject.GetComponent<SkeletonEnemyMovement>().DestroySelf());
+                hitEnemy.gameObject.GetComponent<SkeletonEnemyMovement>().StartCoroutine(hitEnemy.gameObject.GetComponent<SkeletonEnemyMovement>().DestroySelf());
+                gameManager.GetComponent<GameManager>().IncreaseScore(hitEnemy.gameObject.tag);
             }
-            else if (collider.gameObject.tag.Contains("Enemy"))
+            else if (hitEnemy.gameObject.tag.Contains("Enemy"))
             {
-                collider.gameObject.GetComponent<EnemyMovement>().StartCoroutine(collider.gameObject.GetComponent<EnemyMovement>().DestroySelf());
+                hitEnemy.gameObject.GetComponent<EnemyMovement>().StartCoroutine(hitEnemy.gameObject.GetComponent<EnemyMovement>().DestroySelf());
+                gameManager.GetComponent<GameManager>().IncreaseScore(hitEnemy.gameObject.tag);
             }
         }
     }

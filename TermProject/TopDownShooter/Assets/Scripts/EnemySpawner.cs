@@ -18,7 +18,9 @@ public class EnemySpawner : MonoBehaviour
         float xRandom = Random.Range(-20f, 20f);
         int random = Random.Range(0,enemies.Length);
         GameObject enemy = Instantiate(enemies[random], new Vector3(xRandom, 3f,mainCamera.transform.position.z + 25f), Quaternion.identity);
-        enemy.GetComponent<EnemyMovement>().Initialize(mainCamera);
+        if (random < 2) enemy.GetComponent<EnemyMovement>().Initialize(mainCamera);
+        
+        
     }
     // Update is called once per frame
     void Update()

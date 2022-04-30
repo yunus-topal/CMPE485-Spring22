@@ -44,5 +44,28 @@ public class GameManager : MonoBehaviour
         return bossTransition;
     }
 
+    public void IncreaseScore(String objectType)
+    {
+        switch (objectType)
+        {
+            case "SkeletonEnemy": 
+                score += 2;
+                break;
+            case "DefaultEnemy": 
+                score += 3;
+                break;
+            case "LockedinEnemy": 
+                score += 5;
+                break;
+            default: 
+                Debug.Log("Unknown Object");
+                break;
+        }
+
+        if (score > 10 && !bossPhase)
+        {
+            SetBossPhase();
+        }
+    }
 
 }
