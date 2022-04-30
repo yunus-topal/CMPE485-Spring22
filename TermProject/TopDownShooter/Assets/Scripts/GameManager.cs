@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     private bool gameOver = false;
     private bool bossPhase = false;
     private float bossTransition = 5.0f;
+    private int score = 0;
     
     private void Update()
     {

@@ -70,12 +70,9 @@ public class EnemyMovement : MonoBehaviour
         if (gameManager.GetComponent<GameManager>().GetGameOver())
         {
             StopAllCoroutines();
+            return;
         }
-        else if (player.transform.position.z - transform.position.z > 30f  || gameManager.GetComponent<GameManager>().GetBossPhase())
-        {
-            StartCoroutine(DestroySelf());
-        }
-        else
+        if(!isDying)
         {
             // get in the scene and attack player.
             if (transform.position.z > mainCamera.transform.position.z + 15f)

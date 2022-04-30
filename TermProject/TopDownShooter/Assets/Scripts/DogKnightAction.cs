@@ -55,9 +55,13 @@ public class DogKnightAction : MonoBehaviour
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.transform.position, attackRange, enemyLayers);
         foreach (Collider collider in hitEnemies)    
         {
-            if (collider.gameObject.tag.Contains("Enemy"))
+            if (collider.gameObject.CompareTag("SkeletonEnemy"))
             {
-                Destroy(collider.gameObject);
+                collider.gameObject.GetComponent<SkeletonEnemyMovement>().StartCoroutine(collider.gameObject.GetComponent<SkeletonEnemyMovement>().DestroySelf());
+            }
+            else if (collider.gameObject.tag.Contains("Enemy"))
+            {
+                collider.gameObject.GetComponent<EnemyMovement>().StartCoroutine(collider.gameObject.GetComponent<EnemyMovement>().DestroySelf());
             }
         }
     }
