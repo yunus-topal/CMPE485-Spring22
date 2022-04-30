@@ -30,14 +30,6 @@ public class DogKnightMovement : MonoBehaviour
     void Update()
     {
         bool bossPhase = gameManager.GetComponent<GameManager>().GetBossPhase();
-        if (!bossPhase)
-        {
-            CheckBossPhase();
-        }else if (gameManager.GetComponent<GameManager>().GetBossTransition() >= 0)
-        {
-            playerAnimator.SetFloat("speed_f",0f);
-            return;
-        }
         CheckMovement();
         StayInLine(bossPhase);
         SetRotation();
@@ -47,19 +39,7 @@ public class DogKnightMovement : MonoBehaviour
     {
         return dashing;
     }
-
-    bool CheckBossPhase()
-    {
-        float offset = mainCamera.transform.position.z - 125f;
-        if (offset >= 0)
-        {
-            mainCamera.transform.position -= new Vector3(0,0,offset);
-            gameManager.GetComponent<GameManager>().SetBossPhase();
-            return true;
-        }
-
-        return false;
-    }
+    
     void CheckMovement()
     {
         float horizontalSpeed = Input.GetAxis("Horizontal");
@@ -88,27 +68,29 @@ public class DogKnightMovement : MonoBehaviour
     }
     void StayInLine(bool bossPhase)
     {
+        
         // stay in z axis
-        if (transform.position.z < mainCamera.gameObject.transform.position.z - 15)
+        if (transform.position.z > 25)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y,
-                mainCamera.gameObject.transform.position.z - 15);
+            float diff = transform.position.z - 25f;
+            transform.position -= new Vector3(0, 0,diff);
+        }
+        else if (transform.position.z < -25)
+        {
+            float diff = transform.position.z + 25f;
+            transform.position -= new Vector3(0, 0,diff);
         }
         
         // stay in x axis
-        if (transform.position.x > 25)
+        if (transform.position.x > 50)
         {
-            transform.position = new Vector3(25f, transform.position.y, transform.position.z);
+            float diff = transform.position.x - 50f;
+            transform.position -= new Vector3(diff, 0,0);
         }
-        else if (transform.position.x < -25)
+        else if (transform.position.x < -50)
         {
-            transform.position = new Vector3(-25f, transform.position.y, transform.position.z);
-        }
-        // move camera if player moves too far
-        if (transform.position.z > mainCamera.gameObject.transform.position.z && !bossPhase)
-        {
-            mainCamera.gameObject.transform.position = new Vector3(mainCamera.gameObject.transform.position.x,
-                mainCamera.gameObject.transform.position.y, transform.position.z);
+            float diff = transform.position.x + 50f;
+            transform.position -= new Vector3(diff, 0,0);
         }
     }
     void SetRotation()
