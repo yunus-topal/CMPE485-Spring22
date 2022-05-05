@@ -13,7 +13,10 @@ public class DogKnightAction : MonoBehaviour
     public LayerMask enemyLayers;
     private Animator dogAnimator;
     private DogKnightMovement movementScript;
-
+    private int parryCount = 0;
+    private float rageDuration = 0f;
+    private bool isOnRage = false;
+    
     private void Start()
     {
         gameManager = GameObject.FindWithTag("GameController");
@@ -38,9 +41,24 @@ public class DogKnightAction : MonoBehaviour
                 StartCoroutine(Parry());
             }
         }
+        else if (Input.GetKey(KeyCode.E) && !movementScript.GetDashing() && parryCount > 10 && !isOnRage)
+        {
+            if (coolDown <= 0f)
+            {
+                StartCoroutine(Rage());
+            }
+        }
         if (coolDown > 0f)
         { 
             coolDown -= Time.deltaTime;
+        }
+        if (rageDuration > 0f)
+        { 
+            rageDuration -= Time.deltaTime;
+            if (rageDuration <= 0f)
+            {
+                StartCoroutine(Shrink());
+            }
         }
     }
 
@@ -49,6 +67,39 @@ public class DogKnightAction : MonoBehaviour
         return coolDown;
     }
 
+    IEnumerator Shrink()
+    {
+        float time = 1f;
+        for (float f = 0; f < time; f += Time.deltaTime)
+        {
+            float decrease = (2f / time) * Time.deltaTime;
+            transform.localScale -= new Vector3(decrease,decrease,decrease);
+            attackRange -= decrease / 2;
+            parryRange -= decrease / 2;
+
+            yield return null;
+        }
+        rageDuration = 0f;
+        isOnRage = false;
+    }
+    IEnumerator Rage()
+    {
+        isOnRage = true;
+        parryCount = 0;
+        dogAnimator.SetTrigger("rage_trig");
+        coolDown = 1f;
+        float time = 1f;
+        for (float f = 0; f < time; f += Time.deltaTime)
+        {
+            float increase = (2f / time) * Time.deltaTime;
+            transform.localScale += new Vector3(increase,increase,increase);
+            attackRange += increase / 2;
+            parryRange += increase / 2;
+            yield return null;
+        }
+
+        rageDuration = 5f;
+    }
     IEnumerator Parry()
     {
         dogAnimator.SetTrigger("defend_trig");
@@ -60,7 +111,7 @@ public class DogKnightAction : MonoBehaviour
             if (hitEnemy.gameObject.tag.Contains("Bullet"))
             {
                 Destroy(hitEnemy.gameObject);
-                Debug.Log("Parry this you filthy casual");
+                parryCount += 1;
             }
             
         }
