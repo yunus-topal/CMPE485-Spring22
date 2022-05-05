@@ -12,6 +12,7 @@ TagManager:
   - Boss
   - SkeletonEnemy
   - KnightEnemy
+  - DefaultBullet
   layers:
   - Default
   - TransparentFX

@@ -9,6 +9,7 @@ public class DogKnightAction : MonoBehaviour
     public float coolDown = 0f;
     public GameObject attackPoint;
     private float attackRange = 5f;
+    private float parryRange = 3f;
     public LayerMask enemyLayers;
     private Animator dogAnimator;
     private DogKnightMovement movementScript;
@@ -34,8 +35,7 @@ public class DogKnightAction : MonoBehaviour
         {
             if (coolDown <= 0f)
             {
-                dogAnimator.SetTrigger("defend_trig");
-                coolDown = 0.3f;
+                StartCoroutine(Parry());
             }
         }
         if (coolDown > 0f)
@@ -49,6 +49,22 @@ public class DogKnightAction : MonoBehaviour
         return coolDown;
     }
 
+    IEnumerator Parry()
+    {
+        dogAnimator.SetTrigger("defend_trig");
+        coolDown = 0.3f;
+        yield return new WaitForSeconds(0.2f);
+        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.transform.position, parryRange, enemyLayers);
+        foreach (Collider hitEnemy in hitEnemies)    
+        {
+            if (hitEnemy.gameObject.tag.Contains("Bullet"))
+            {
+                Destroy(hitEnemy.gameObject);
+                Debug.Log("Parry this you filthy casual");
+            }
+            
+        }
+    }
     IEnumerator Attack()
     {
         dogAnimator.SetTrigger("attack_trig");
