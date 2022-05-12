@@ -52,7 +52,7 @@ public class SkeletonEnemyMovement : MonoBehaviour
     private void CheckDistance()
     {
         float distance = Vector3.Distance(player.transform.position, gameObject.transform.position);
-        if (distance < 3)
+        if (distance < 5)
         {
             StartCoroutine(AttackPlayer());
         }

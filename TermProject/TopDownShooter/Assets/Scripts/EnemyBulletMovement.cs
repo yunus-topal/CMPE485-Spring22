@@ -15,7 +15,7 @@ public class EnemyBulletMovement : MonoBehaviour
     void Update()
     {
         lifeTime -= Time.deltaTime;
-        if (lifeTime < 0  || gameManager.GetComponent<GameManager>().GetBossPhase())
+        if (lifeTime < 0 )
         {
             Destroy(gameObject);
         }

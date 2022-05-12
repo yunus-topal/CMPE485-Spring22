@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     private bool bossPhase = false;
     private float bossTransition = 5.0f;
     private int score = 0;
+    private const int BossTrigScore = 10;
     
     private void Update()
     {
@@ -62,7 +63,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        if (score > 10 && !bossPhase)
+        if (score > BossTrigScore && !bossPhase)
         {
             SetBossPhase();
         }

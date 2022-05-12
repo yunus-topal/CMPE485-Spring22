@@ -8,10 +8,11 @@ public class BossMovement : MonoBehaviour
 
     private Animator bossAnimator;
 
-    private bool isAlive = true;
     private int hp = 5;
 
     public GameObject skeletonPrefab;
+
+    public GameObject skeletenEffect;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,21 +22,33 @@ public class BossMovement : MonoBehaviour
 
     private IEnumerator SpawnMinions()
     {
-        while (isAlive)
+        yield return new WaitForSeconds(1f);
+        bossAnimator.SetTrigger("spawn_trig");
+        yield return new WaitForSeconds(1f);
+        GameObject c1 = Instantiate(skeletenEffect, new Vector3(-40f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
+        GameObject c2 = Instantiate(skeletenEffect, new Vector3(-20f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
+        GameObject c3 = Instantiate(skeletenEffect, new Vector3(40f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
+        GameObject c4 = Instantiate(skeletenEffect, new Vector3(20f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
+        for (int i = 0; i < 5; i++)
         {
-            yield return new WaitForSeconds(1f);
-            bossAnimator.SetTrigger("spawn_trig");
-            yield return new WaitForSeconds(1f);
             SpawnSkeletons();
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(1.5f);
         }
+        Destroy(c1);
+        Destroy(c2);
+        Destroy(c3);
+        Destroy(c4);
     }
 
+    
+    
     private void SpawnSkeletons()
     {
-        //spawn 2 skeletons
-        Instantiate(skeletonPrefab,new Vector3(-10,0,100f),Quaternion.identity);
-        Instantiate(skeletonPrefab,new Vector3(10,0,100f),Quaternion.identity);
+        //spawn 2 skeletons on each side of the boss
+        Instantiate(skeletonPrefab,new Vector3(-40f,3f,25f),Quaternion.identity);
+        Instantiate(skeletonPrefab,new Vector3(-20f,3f,25f),Quaternion.identity);
+        Instantiate(skeletonPrefab,new Vector3(40f,3f,25f),Quaternion.identity);
+        Instantiate(skeletonPrefab,new Vector3(20f,3f,25f),Quaternion.identity);
     }
     public IEnumerator StartEntrance()
     {
