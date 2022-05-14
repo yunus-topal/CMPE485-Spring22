@@ -27,27 +27,32 @@ public class DogKnightAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Mouse0) && !movementScript.GetDashing())
+        if (!gameManager.GetComponent<GameManager>().GetGameOver())
         {
-            if (coolDown <= 0f)
+            // actions
+            if (Input.GetKey(KeyCode.Mouse0) && !movementScript.GetDashing())
             {
-                StartCoroutine(Attack());
+                if (coolDown <= 0f)
+                {
+                    StartCoroutine(Attack());
+                }
+            }
+            else if (Input.GetKey(KeyCode.Mouse1) && !movementScript.GetDashing())
+            {
+                if (coolDown <= 0f)
+                {
+                    StartCoroutine(Parry());
+                }
+            }
+            else if (Input.GetKey(KeyCode.E) && !movementScript.GetDashing() && parryCount > 10 && !isOnRage)
+            {
+                if (coolDown <= 0f)
+                {
+                    StartCoroutine(Rage());
+                }
             }
         }
-        else if (Input.GetKey(KeyCode.Mouse1) && !movementScript.GetDashing())
-        {
-            if (coolDown <= 0f)
-            {
-                StartCoroutine(Parry());
-            }
-        }
-        else if (Input.GetKey(KeyCode.E) && !movementScript.GetDashing() && parryCount > 10 && !isOnRage)
-        {
-            if (coolDown <= 0f)
-            {
-                StartCoroutine(Rage());
-            }
-        }
+        
         if (coolDown > 0f)
         { 
             coolDown -= Time.deltaTime;

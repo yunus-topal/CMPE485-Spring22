@@ -63,7 +63,7 @@ public class BossMovement : MonoBehaviour
 
     private IEnumerator AttackPattern()
     {
-        while (hp > 0)
+        while (!gameManager.GetComponent<GameManager>().GetGameOver())
         {
             StartCoroutine(SpawnMinions());
             yield return new WaitForSeconds(5f);

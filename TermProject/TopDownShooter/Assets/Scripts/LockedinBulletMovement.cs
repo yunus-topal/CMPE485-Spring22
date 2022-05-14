@@ -34,9 +34,8 @@ public class LockedinBulletMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            //GameObject.FindWithTag("GameController").GetComponent<GameManager>().SetGameOver(true);
+            collision.gameObject.GetComponent<DogKnightMovement>().GetHit(2f);
             Instantiate(explosion, transform.position, Quaternion.identity);
-            //Destroy(collision.gameObject);
             Destroy(gameObject);
         }
     }

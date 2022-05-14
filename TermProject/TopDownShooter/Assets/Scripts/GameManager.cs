@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private bool gameOver = false;
+    private bool gameOver = true;
     private bool bossPhase = false;
     private float bossTransition = 5.0f;
     private int score = 0;
@@ -22,6 +22,14 @@ public class GameManager : MonoBehaviour
     public void SetGameOver(bool b)
     {
         gameOver = b;
+        if (gameOver)
+        {
+            StopSpawner();
+        }
+        else
+        {
+            StartSpawner();
+        }
     }
 
     public bool GetGameOver()

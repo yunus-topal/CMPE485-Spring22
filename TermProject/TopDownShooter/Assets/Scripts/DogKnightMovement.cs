@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DogKnightMovement : MonoBehaviour
 {
-
+    private float hp = 20f;
     public Camera mainCamera;
     private float speed = 15f;
     private Animator playerAnimator;
@@ -17,6 +18,7 @@ public class DogKnightMovement : MonoBehaviour
 
     private GameObject gameManager;
     private DogKnightAction dogAction;
+    public Slider hpBar;
 
 // Start is called before the first frame update
     void Start()
@@ -29,10 +31,13 @@ public class DogKnightMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool bossPhase = gameManager.GetComponent<GameManager>().GetBossPhase();
-        CheckMovement();
-        StayInLine(bossPhase);
-        SetRotation();
+        if (!gameManager.GetComponent<GameManager>().GetGameOver())
+        {
+            bool bossPhase = gameManager.GetComponent<GameManager>().GetBossPhase();
+            CheckMovement();
+            StayInLine(bossPhase);
+            SetRotation();
+        }
     }
 
     public bool GetDashing()
@@ -114,5 +119,27 @@ public class DogKnightMovement : MonoBehaviour
         }
 
         dashing = false;
+    }
+
+    public void GetHit(float f)
+    {
+        hp -= f;
+        if (hp <= 0)
+        {
+            hpBar.value = 0;
+            StartCoroutine(DestroySelf());
+        }
+        else
+        {
+            hpBar.value = hp / 20f;
+        }
+    }
+
+    private IEnumerator DestroySelf()
+    {
+        gameManager.GetComponent<GameManager>().SetGameOver(true);
+        playerAnimator.SetTrigger("die_trig");
+        yield return new WaitForSeconds(1f);
+        Destroy(gameObject);
     }
 }

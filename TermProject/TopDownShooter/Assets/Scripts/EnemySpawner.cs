@@ -8,12 +8,6 @@ public class EnemySpawner : MonoBehaviour
     public GameObject[] enemies;
     public GameObject[] effect;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        InvokeRepeating(nameof(SpawnEnemy),2.0f,2f);
-    }
-
     void SpawnEnemy()
     {
         // to make sure that x position will between -50, -10 or 10, 50.
@@ -30,13 +24,5 @@ public class EnemySpawner : MonoBehaviour
         yield return new WaitForSeconds(1f);
         GameObject enemy = Instantiate(enemies[type], new Vector3(x, 3f,z), Quaternion.identity );
         if (type < 2) enemy.GetComponent<EnemyMovement>().Initialize(mainCamera);
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        if (GameObject.FindWithTag("GameController").GetComponent<GameManager>().GetGameOver())
-        {
-            CancelInvoke(nameof(SpawnEnemy));
-        }
     }
 }
