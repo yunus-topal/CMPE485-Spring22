@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    private int hp = 1;
+    private float hp = 1f;
     private GameObject gameManager;
     private Camera mainCamera;
     private float speed = 10f;
@@ -90,9 +90,9 @@ public class EnemyMovement : MonoBehaviour
 
         
     }
-    public void TakeDamage()
+    public void TakeDamage(float f)
     {
-        hp -= 1;
+        hp -= f;
         if (hp <= 0)
         {
             StartCoroutine(DestroySelf());

@@ -8,7 +8,7 @@ public class BossMovement : MonoBehaviour
 
     private Animator bossAnimator;
 
-    private int hp = 50;
+    private float hp = 25f;
 
     public GameObject skeletonPrefab;
 
@@ -16,10 +16,14 @@ public class BossMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Initialize();
+    }
+
+    public void Initialize()
+    {
         gameManager = GameObject.FindWithTag("GameController");
         bossAnimator = gameObject.GetComponent<Animator>();
     }
-    
     private IEnumerator SpawnMinions()
     {
         yield return new WaitForSeconds(1f);
@@ -34,7 +38,7 @@ public class BossMovement : MonoBehaviour
             bossAnimator.SetTrigger("spawn_trig");
             yield return new WaitForSeconds(1f);
             SpawnSkeletons();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
         }
 
     }
@@ -76,12 +80,13 @@ public class BossMovement : MonoBehaviour
         StopCoroutine(SpawnMinions());
         bossAnimator.SetTrigger("die_trig");
         yield return new WaitForSeconds(1f);
+        gameManager.GetComponent<GameManager>().SetGameOver(true);
         Destroy(gameObject);
     }
     
-    public void TakeDamage()
+    public void TakeDamage(float f)
     {
-        hp -= 1;
+        hp -= f;
         if (hp <= 0)
         {
             StartCoroutine(DestroySelf());

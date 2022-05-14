@@ -16,7 +16,8 @@ public class DogKnightAction : MonoBehaviour
     private DogKnightMovement movementScript;
     private bool isOnRage = false;
 
-    public Slider rageBar;
+    private Slider rageBar;
+    private float hitPower = 1f;
 
     public bool getRage()
     {
@@ -24,6 +25,20 @@ public class DogKnightAction : MonoBehaviour
     }
     private void Start()
     {
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        Slider[] sliders = FindObjectsOfType<Slider>();
+        foreach (Slider slider in sliders)
+        {
+            if (slider.gameObject.CompareTag("RageBar"))
+            {
+                rageBar = slider;
+                break;
+            }      
+        }
         gameManager = GameObject.FindWithTag("GameController");
         dogAnimator = gameObject.GetComponent<Animator>();
         movementScript = gameObject.GetComponent<DogKnightMovement>();
@@ -82,10 +97,12 @@ public class DogKnightAction : MonoBehaviour
             yield return null;
         }
         isOnRage = false;
+        hitPower = 1f;
     }
     IEnumerator Rage()
     {
         isOnRage = true;
+        hitPower = 2f;
         dogAnimator.SetTrigger("rage_trig");
         coolDown = 1f;
         float time = 1f;
@@ -138,15 +155,15 @@ public class DogKnightAction : MonoBehaviour
             rageBar.value += 0.05f;
             if (hitEnemy.gameObject.CompareTag("SkeletonEnemy") || hitEnemy.gameObject.CompareTag("KnightEnemy"))
             {
-                hitEnemy.gameObject.GetComponent<SkeletonEnemyMovement>().TakeDamage();
+                hitEnemy.gameObject.GetComponent<SkeletonEnemyMovement>().TakeDamage(hitPower);
             }
             else if (hitEnemy.gameObject.tag.Contains("Enemy"))
             {
-                hitEnemy.gameObject.GetComponent<EnemyMovement>().TakeDamage();
+                hitEnemy.gameObject.GetComponent<EnemyMovement>().TakeDamage(hitPower);
             }
             else if (hitEnemy.gameObject.tag.Contains("Boss"))
             {
-                hitEnemy.gameObject.GetComponent<BossMovement>().TakeDamage();
+                hitEnemy.gameObject.GetComponent<BossMovement>().TakeDamage(hitPower);
             }
         }
     }

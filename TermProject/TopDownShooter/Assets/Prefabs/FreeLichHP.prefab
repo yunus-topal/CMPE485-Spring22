@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1287031508511861350}
   - component: {fileID: 1287031508502267318}
   - component: {fileID: 1287031508511731924}
+  - component: {fileID: 1201401712}
   m_Layer: 6
   m_Name: FreeLichHP
   m_TagString: Boss
@@ -66,6 +67,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonPrefab: {fileID: 1812659917213882, guid: 705458a9eac3ae740932e6aa33f3ca89, type: 3}
+  skeletenEffect: {fileID: 100000, guid: 7b56cd9b663f23f429e131a54ec87db0, type: 3}
+--- !u!65 &1201401712
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287031508511634950}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5929781, y: 2.214643, z: 1}
+  m_Center: {x: -0.0203962, y: 0.60732055, z: 0}
 --- !u!1 &1287031508511634960
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class DogKnightMovement : MonoBehaviour
 {
     private float hp = 20f;
-    public Camera mainCamera;
+    private Camera mainCamera;
     private float speed = 15f;
     private Animator playerAnimator;
 
@@ -18,11 +18,27 @@ public class DogKnightMovement : MonoBehaviour
 
     private GameObject gameManager;
     private DogKnightAction dogAction;
-    public Slider hpBar;
+    private Slider hpBar;
 
 // Start is called before the first frame update
     void Start()
     {
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        Slider[] sliders = FindObjectsOfType<Slider>();
+        foreach (Slider slider in sliders)
+        {
+            if (slider.gameObject.CompareTag("HpBar"))
+            {
+                hpBar = slider;
+                break;
+            }      
+        }
+        
+        mainCamera = Camera.main;
         gameManager = GameObject.FindWithTag("GameController");
         playerAnimator = GetComponent<Animator>();
         dogAction = gameObject.GetComponent<DogKnightAction>();

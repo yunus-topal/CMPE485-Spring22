@@ -70,7 +70,7 @@ public class SkeletonEnemyMovement : MonoBehaviour
         {
             if (hitEnemy.gameObject.CompareTag("Player"))
             {
-                Debug.Log("Hit the player");
+                hitEnemy.gameObject.GetComponent<DogKnightMovement>().GetHit(1f);
             }
         }
         isAttacking = false;
@@ -83,15 +83,15 @@ public class SkeletonEnemyMovement : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void TakeDamage()
+    public void TakeDamage(float f)
     {
-        if (this.gameObject.CompareTag("KnightEnemy"))
+        if (gameObject.CompareTag("KnightEnemy"))
         {
-            hp -= 0.5f;
+            hp -= f / 2;
         }
         else
         {
-            hp -= 1;
+            hp -= f;
         }
         if (hp <= 0)
         {

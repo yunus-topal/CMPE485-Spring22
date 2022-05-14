@@ -13,6 +13,9 @@ TagManager:
   - SkeletonEnemy
   - KnightEnemy
   - DefaultBullet
+  - HpBar
+  - RageBar
+  - SkeletonSummon
   layers:
   - Default
   - TransparentFX
