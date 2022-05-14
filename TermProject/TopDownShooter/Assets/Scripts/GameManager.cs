@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     private bool bossPhase = false;
     private float bossTransition = 5.0f;
     private int score = 0;
-    private const int BossTrigScore = 10;
+    private const int BossTrigScore = 30;
     public GameObject spawnManager;
     public Slider hpBar;
     public Slider skillBar;
@@ -88,6 +88,9 @@ public class GameManager : MonoBehaviour
                 score += 3;
                 break;
             case "LockedinEnemy": 
+                score += 3;
+                break;
+            case "KnightEnemy":
                 score += 5;
                 break;
             default: 
@@ -119,7 +122,7 @@ public class GameManager : MonoBehaviour
             }
         }
         // recreate player
-        GameObject doggy = Instantiate(playerPrefab, new Vector3(0, 1, -20), Quaternion.identity);
+        GameObject doggy = Instantiate(playerPrefab, new Vector3(0, 3f, -20), Quaternion.identity);
         doggy.GetComponent<DogKnightAction>().Initialize();
         doggy.GetComponent<DogKnightMovement>().Initialize();
         // recreate boss with initial settings
