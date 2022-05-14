@@ -8,7 +8,7 @@ public class BossMovement : MonoBehaviour
 
     private Animator bossAnimator;
 
-    private int hp = 5;
+    private int hp = 50;
 
     public GameObject skeletonPrefab;
 
@@ -19,27 +19,25 @@ public class BossMovement : MonoBehaviour
         gameManager = GameObject.FindWithTag("GameController");
         bossAnimator = gameObject.GetComponent<Animator>();
     }
-
+    
     private IEnumerator SpawnMinions()
     {
         yield return new WaitForSeconds(1f);
         bossAnimator.SetTrigger("spawn_trig");
         yield return new WaitForSeconds(1f);
-        GameObject c1 = Instantiate(skeletenEffect, new Vector3(-40f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
-        GameObject c2 = Instantiate(skeletenEffect, new Vector3(-20f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
-        GameObject c3 = Instantiate(skeletenEffect, new Vector3(40f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
-        GameObject c4 = Instantiate(skeletenEffect, new Vector3(20f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
+        Instantiate(skeletenEffect, new Vector3(-40f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
+        Instantiate(skeletenEffect, new Vector3(-20f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
+        Instantiate(skeletenEffect, new Vector3(40f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
+        Instantiate(skeletenEffect, new Vector3(20f, 3f, 25f), Quaternion.Euler(new Vector3(-90, 0, 0)));
         for (int i = 0; i < 5; i++)
         {
+            bossAnimator.SetTrigger("spawn_trig");
+            yield return new WaitForSeconds(1f);
             SpawnSkeletons();
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(0.5f);
         }
-        Destroy(c1);
-        Destroy(c2);
-        Destroy(c3);
-        Destroy(c4);
-    }
 
+    }
     
     
     private void SpawnSkeletons()
@@ -60,9 +58,19 @@ public class BossMovement : MonoBehaviour
             yield return null;
         }
         bossAnimator.SetTrigger("on_place_trig");
-        StartCoroutine(SpawnMinions());
+        StartCoroutine(AttackPattern());
     }
-    
+
+    private IEnumerator AttackPattern()
+    {
+        while (hp > 0)
+        {
+            StartCoroutine(SpawnMinions());
+            yield return new WaitForSeconds(5f);
+            gameManager.GetComponent<GameManager>().StartSpawner();
+            yield return new WaitForSeconds(10f);
+        }
+    }
     private IEnumerator DestroySelf()
     {
         StopCoroutine(SpawnMinions());

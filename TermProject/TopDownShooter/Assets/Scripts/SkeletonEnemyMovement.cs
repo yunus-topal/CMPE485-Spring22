@@ -8,7 +8,7 @@ public class SkeletonEnemyMovement : MonoBehaviour
     public GameObject attackPoint;
     private float attackRange = 5f;
     public LayerMask enemyLayers;
-    private int hp = 1;
+    private float hp = 1f;
     private GameObject player;
     private Vector3 direction = new Vector3(1f,0f,-1f);
     private Rigidbody rb;
@@ -85,7 +85,14 @@ public class SkeletonEnemyMovement : MonoBehaviour
 
     public void TakeDamage()
     {
-        hp -= 1;
+        if (this.gameObject.CompareTag("KnightEnemy"))
+        {
+            hp -= 0.5f;
+        }
+        else
+        {
+            hp -= 1;
+        }
         if (hp <= 0)
         {
             StartCoroutine(DestroySelf());

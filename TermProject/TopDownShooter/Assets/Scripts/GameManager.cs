@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     private float bossTransition = 5.0f;
     private int score = 0;
     private const int BossTrigScore = 10;
+    public GameObject spawnManager;
     
     private void Update()
     {
@@ -31,10 +32,21 @@ public class GameManager : MonoBehaviour
     public void SetBossPhase()
     {
         bossPhase = true;
+        StopSpawner();
         BossMovement bossMover = GameObject.FindWithTag("Boss").GetComponent<BossMovement>();
         bossMover.StartCoroutine(bossMover.StartEntrance());
     }
 
+    public void StopSpawner()
+    {
+        spawnManager.GetComponent<EnemySpawner>().CancelInvoke("SpawnEnemy");
+    }
+
+    public void StartSpawner()
+    {
+        spawnManager.GetComponent<EnemySpawner>().InvokeRepeating("SpawnEnemy",2.0f,2f);
+    }
+    
     public bool GetBossPhase()
     {
         return bossPhase;

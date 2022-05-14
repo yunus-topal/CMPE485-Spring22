@@ -34,7 +34,7 @@ public class EnemySpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameObject.FindWithTag("GameController").GetComponent<GameManager>().GetGameOver()  || GameObject.FindWithTag("GameController").GetComponent<GameManager>().GetBossPhase())
+        if (GameObject.FindWithTag("GameController").GetComponent<GameManager>().GetGameOver())
         {
             CancelInvoke(nameof(SpawnEnemy));
         }
