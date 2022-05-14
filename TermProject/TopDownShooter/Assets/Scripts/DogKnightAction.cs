@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DogKnightAction : MonoBehaviour
 {
@@ -13,10 +14,14 @@ public class DogKnightAction : MonoBehaviour
     public LayerMask enemyLayers;
     private Animator dogAnimator;
     private DogKnightMovement movementScript;
-    private int parryCount = 0;
-    private float rageDuration = 0f;
     private bool isOnRage = false;
-    
+
+    public Slider rageBar;
+
+    public bool getRage()
+    {
+        return isOnRage;
+    }
     private void Start()
     {
         gameManager = GameObject.FindWithTag("GameController");
@@ -44,7 +49,7 @@ public class DogKnightAction : MonoBehaviour
                     StartCoroutine(Parry());
                 }
             }
-            else if (Input.GetKey(KeyCode.E) && !movementScript.GetDashing() && parryCount > 10 && !isOnRage)
+            else if (Input.GetKey(KeyCode.E) && !movementScript.GetDashing() && rageBar.value >= 1f && !isOnRage)
             {
                 if (coolDown <= 0f)
                 {
@@ -56,14 +61,6 @@ public class DogKnightAction : MonoBehaviour
         if (coolDown > 0f)
         { 
             coolDown -= Time.deltaTime;
-        }
-        if (rageDuration > 0f)
-        { 
-            rageDuration -= Time.deltaTime;
-            if (rageDuration <= 0f)
-            {
-                StartCoroutine(Shrink());
-            }
         }
     }
 
@@ -84,13 +81,11 @@ public class DogKnightAction : MonoBehaviour
 
             yield return null;
         }
-        rageDuration = 0f;
         isOnRage = false;
     }
     IEnumerator Rage()
     {
         isOnRage = true;
-        parryCount = 0;
         dogAnimator.SetTrigger("rage_trig");
         coolDown = 1f;
         float time = 1f;
@@ -103,7 +98,19 @@ public class DogKnightAction : MonoBehaviour
             yield return null;
         }
 
-        rageDuration = 5f;
+        StartCoroutine(RageDeplete());
+    }
+
+    IEnumerator RageDeplete()
+    {
+        while (rageBar.value >= 0.1f)
+        {
+            float barDecrease = Time.deltaTime / 3;
+            rageBar.value -= barDecrease;
+            yield return null;
+        }
+
+        StartCoroutine(Shrink());
     }
     IEnumerator Parry()
     {
@@ -116,9 +123,8 @@ public class DogKnightAction : MonoBehaviour
             if (hitEnemy.gameObject.tag.Contains("Bullet"))
             {
                 Destroy(hitEnemy.gameObject);
-                parryCount += 1;
+                rageBar.value += 0.2f;
             }
-            
         }
     }
     IEnumerator Attack()
@@ -127,8 +133,9 @@ public class DogKnightAction : MonoBehaviour
         coolDown = 0.3f;
         yield return new WaitForSeconds(0.2f);
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.transform.position, attackRange, enemyLayers);
-        foreach (Collider hitEnemy in hitEnemies)    
+        foreach (Collider hitEnemy in hitEnemies)
         {
+            rageBar.value += 0.05f;
             if (hitEnemy.gameObject.CompareTag("SkeletonEnemy") || hitEnemy.gameObject.CompareTag("KnightEnemy"))
             {
                 hitEnemy.gameObject.GetComponent<SkeletonEnemyMovement>().TakeDamage();

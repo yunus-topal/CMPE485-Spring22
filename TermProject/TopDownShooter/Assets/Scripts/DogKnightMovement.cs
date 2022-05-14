@@ -123,16 +123,20 @@ public class DogKnightMovement : MonoBehaviour
 
     public void GetHit(float f)
     {
-        hp -= f;
-        if (hp <= 0)
+        if (!gameObject.GetComponent<DogKnightAction>().getRage())
         {
-            hpBar.value = 0;
-            StartCoroutine(DestroySelf());
+            hp -= f;
+            if (hp <= 0)
+            {
+                hpBar.value = 0;
+                StartCoroutine(DestroySelf());
+            }
+            else
+            {
+                hpBar.value = hp / 20f;
+            }
         }
-        else
-        {
-            hpBar.value = hp / 20f;
-        }
+       
     }
 
     private IEnumerator DestroySelf()
