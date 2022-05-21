@@ -1345,6 +1345,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   audioClip: {fileID: 8300000, guid: 00fa9cf2f2e4d2c419c09e6c056e03eb, type: 3}
+  swingClip: {fileID: 8300000, guid: 13182107f288fdc47a11f9216c8f062b, type: 3}
+  clankClip: {fileID: 8300000, guid: 80151380c0f818243b66a78ef69c9fcd, type: 3}
 --- !u!54 &1562200549
 Rigidbody:
   m_ObjectHideFlags: 0

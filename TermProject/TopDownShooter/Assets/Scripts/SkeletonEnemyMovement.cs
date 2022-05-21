@@ -16,7 +16,9 @@ public class SkeletonEnemyMovement : MonoBehaviour
     private Animator skeletonAnimator;
     private bool isAttacking = false;
     private float speed = 10f;
-
+    public AudioClip swingClip;
+    public AudioClip clankClip;
+    AudioSource audioSource;
     private bool isDying = false;
     // Start is called before the first frame update
     void Start()
@@ -25,6 +27,7 @@ public class SkeletonEnemyMovement : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
         gameManager = GameObject.FindWithTag("GameController");
         skeletonAnimator = gameObject.GetComponent<Animator>();
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -66,13 +69,16 @@ public class SkeletonEnemyMovement : MonoBehaviour
         skeletonAnimator.SetTrigger("attack_trig");
         yield return new WaitForSeconds(0.5f);
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.transform.position, attackRange, enemyLayers);
+        AudioClip attack = swingClip;
         foreach (Collider hitEnemy in hitEnemies)    
         {
             if (hitEnemy.gameObject.CompareTag("Player"))
             {
+                attack = clankClip;
                 hitEnemy.gameObject.GetComponent<DogKnightMovement>().GetHit(1f);
             }
         }
+        audioSource.PlayOneShot(attack);
         yield return new WaitForSeconds(0.5f);
         isAttacking = false;
     }

@@ -19,6 +19,8 @@ public class DogKnightAction : MonoBehaviour
     private Slider rageBar;
     private float hitPower = 1f;
     public AudioClip audioClip;
+    public AudioClip swingClip;
+    public AudioClip clankClip;
     AudioSource audioSource;
 
     public bool getRage()
@@ -154,6 +156,7 @@ public class DogKnightAction : MonoBehaviour
         dogAnimator.SetTrigger("attack_trig");
         coolDown = 0.3f;
         yield return new WaitForSeconds(0.2f);
+        AudioClip attack = swingClip;
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.transform.position, attackRange, enemyLayers);
         foreach (Collider hitEnemy in hitEnemies)
         {
@@ -161,6 +164,7 @@ public class DogKnightAction : MonoBehaviour
             if (hitEnemy.gameObject.CompareTag("SkeletonEnemy") || hitEnemy.gameObject.CompareTag("KnightEnemy"))
             {
                 hitEnemy.gameObject.GetComponent<SkeletonEnemyMovement>().TakeDamage(hitPower);
+                attack = clankClip;
             }
             else if (hitEnemy.gameObject.tag.Contains("Enemy"))
             {
@@ -171,5 +175,7 @@ public class DogKnightAction : MonoBehaviour
                 hitEnemy.gameObject.GetComponent<BossMovement>().TakeDamage(hitPower);
             }
         }
+        audioSource.PlayOneShot(attack);
+
     }
 }
