@@ -18,6 +18,8 @@ public class DogKnightAction : MonoBehaviour
 
     private Slider rageBar;
     private float hitPower = 1f;
+    public AudioClip audioClip;
+    AudioSource audioSource;
 
     public bool getRage()
     {
@@ -39,6 +41,8 @@ public class DogKnightAction : MonoBehaviour
                 break;
             }      
         }
+
+        audioSource = gameObject.GetComponent<AudioSource>();
         gameManager = GameObject.FindWithTag("GameController");
         dogAnimator = gameObject.GetComponent<Animator>();
         movementScript = gameObject.GetComponent<DogKnightMovement>();
@@ -106,6 +110,7 @@ public class DogKnightAction : MonoBehaviour
         dogAnimator.SetTrigger("rage_trig");
         coolDown = 1f;
         float time = 1f;
+        audioSource.PlayOneShot(audioClip);
         for (float f = 0; f < time; f += Time.deltaTime)
         {
             float increase = (2f / time) * Time.deltaTime;

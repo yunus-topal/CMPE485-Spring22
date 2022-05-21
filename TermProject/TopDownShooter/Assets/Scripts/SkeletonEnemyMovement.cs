@@ -64,7 +64,7 @@ public class SkeletonEnemyMovement : MonoBehaviour
         rb.velocity = new Vector3(0, 0, 0);
         skeletonAnimator.SetFloat("speed_f",0f);
         skeletonAnimator.SetTrigger("attack_trig");
-        yield return new WaitForSeconds(1.1f);
+        yield return new WaitForSeconds(0.5f);
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.transform.position, attackRange, enemyLayers);
         foreach (Collider hitEnemy in hitEnemies)    
         {
@@ -73,6 +73,7 @@ public class SkeletonEnemyMovement : MonoBehaviour
                 hitEnemy.gameObject.GetComponent<DogKnightMovement>().GetHit(1f);
             }
         }
+        yield return new WaitForSeconds(0.5f);
         isAttacking = false;
     }
     private IEnumerator DestroySelf()

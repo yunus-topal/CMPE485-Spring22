@@ -13,6 +13,8 @@ public class BossMovement : MonoBehaviour
     public GameObject skeletonPrefab;
 
     public GameObject skeletenEffect;
+    public AudioClip audioClip;
+    AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +25,7 @@ public class BossMovement : MonoBehaviour
     {
         gameManager = GameObject.FindWithTag("GameController");
         bossAnimator = gameObject.GetComponent<Animator>();
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
     private IEnumerator SpawnMinions()
     {
@@ -37,6 +40,7 @@ public class BossMovement : MonoBehaviour
         {
             bossAnimator.SetTrigger("spawn_trig");
             yield return new WaitForSeconds(1f);
+            audioSource.PlayOneShot(audioClip);
             SpawnSkeletons();
             yield return new WaitForSeconds(1f);
         }
@@ -81,6 +85,7 @@ public class BossMovement : MonoBehaviour
         bossAnimator.SetTrigger("die_trig");
         yield return new WaitForSeconds(1f);
         gameManager.GetComponent<GameManager>().SetGameOver(true);
+        gameManager.GetComponent<GameManager>().playVictory();
         Destroy(gameObject);
     }
     

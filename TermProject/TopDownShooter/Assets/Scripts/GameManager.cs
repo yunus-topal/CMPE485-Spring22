@@ -17,6 +17,16 @@ public class GameManager : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject bossPrefab;
     public Button startButton;
+    public AudioClip victoryClip;
+    public AudioClip defeatClip;
+    public AudioClip bossClip;
+    public AudioClip battleClip;
+    AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = gameObject.GetComponent<AudioSource>();
+    }
 
     private void Update()
     {
@@ -32,6 +42,7 @@ public class GameManager : MonoBehaviour
         {
             StopSpawner();
             ShowUI();
+            audioSource.Stop();
         }
         else
         {
@@ -55,6 +66,9 @@ public class GameManager : MonoBehaviour
         StopSpawner();
         BossMovement bossMover = GameObject.FindWithTag("Boss").GetComponent<BossMovement>();
         bossMover.StartCoroutine(bossMover.StartEntrance());
+        audioSource.Stop();
+        audioSource.clip = bossClip;
+        audioSource.Play();
     }
 
     public void StopSpawner()
@@ -131,6 +145,22 @@ public class GameManager : MonoBehaviour
         // adjust hp and skill bars
         hpBar.value = 1;
         skillBar.value = 0;
+        audioSource.loop = true;
+        audioSource.clip = battleClip;
+        audioSource.Play();
+    }
 
+    public void playVictory()
+    {
+        audioSource.loop = false;
+        audioSource.clip = victoryClip;
+        audioSource.Play();
+    }
+
+    public void playDefeat()
+    {
+        audioSource.loop = false;
+        audioSource.clip = defeatClip;
+        audioSource.Play();
     }
 }

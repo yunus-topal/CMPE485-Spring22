@@ -13,9 +13,11 @@ public class EnemyMovement : MonoBehaviour
     public GameObject lockedInBullet;
     private Animator enemyAnimator;
     private bool isDying = false;
-
+    public AudioClip audioClip;
+    AudioSource audioSource;
     public void Initialize(Camera cam)
     {
+        audioSource = gameObject.GetComponent<AudioSource>();
         mainCamera = cam;
         gameManager = GameObject.FindWithTag("GameController");
         enemyAnimator = gameObject.GetComponent<Animator>();
@@ -36,6 +38,7 @@ public class EnemyMovement : MonoBehaviour
         while (!isDying)
         {
             enemyAnimator.SetTrigger("attack_trig");
+            audioSource.PlayOneShot(audioClip);
             yield return new WaitForSeconds(0.25f);
             if(isDying) break;
             GameObject bullet = Instantiate(enemyBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
@@ -49,6 +52,7 @@ public class EnemyMovement : MonoBehaviour
         while (!isDying)
         {
             enemyAnimator.SetTrigger("attack_trig");
+            audioSource.PlayOneShot(audioClip);
             yield return new WaitForSeconds(0.75f);
             if(isDying) break;
             GameObject bullet = Instantiate(lockedInBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);

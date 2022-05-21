@@ -160,6 +160,7 @@ public class DogKnightMovement : MonoBehaviour
         gameManager.GetComponent<GameManager>().SetGameOver(true);
         playerAnimator.SetTrigger("die_trig");
         yield return new WaitForSeconds(1f);
+        gameManager.GetComponent<GameManager>().playDefeat();
         Destroy(gameObject);
     }
 }
