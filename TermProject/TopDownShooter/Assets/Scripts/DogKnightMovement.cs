@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DogKnightMovement : MonoBehaviour
 {
-
-    public Camera mainCamera;
+    private float hp = 20f;
+    private Camera mainCamera;
     private float speed = 15f;
     private Animator playerAnimator;
 
@@ -17,10 +18,27 @@ public class DogKnightMovement : MonoBehaviour
 
     private GameObject gameManager;
     private DogKnightAction dogAction;
+    private Slider hpBar;
 
 // Start is called before the first frame update
     void Start()
     {
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        Slider[] sliders = FindObjectsOfType<Slider>();
+        foreach (Slider slider in sliders)
+        {
+            if (slider.gameObject.CompareTag("HpBar"))
+            {
+                hpBar = slider;
+                break;
+            }      
+        }
+        
+        mainCamera = Camera.main;
         gameManager = GameObject.FindWithTag("GameController");
         playerAnimator = GetComponent<Animator>();
         dogAction = gameObject.GetComponent<DogKnightAction>();
@@ -29,37 +47,20 @@ public class DogKnightMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool bossPhase = gameManager.GetComponent<GameManager>().GetBossPhase();
-        if (!bossPhase)
+        if (!gameManager.GetComponent<GameManager>().GetGameOver())
         {
-            CheckBossPhase();
-        }else if (gameManager.GetComponent<GameManager>().GetBossTransition() >= 0)
-        {
-            playerAnimator.SetFloat("speed_f",0f);
-            return;
+            bool bossPhase = gameManager.GetComponent<GameManager>().GetBossPhase();
+            CheckMovement();
+            StayInLine(bossPhase);
+            SetRotation();
         }
-        CheckMovement();
-        StayInLine(bossPhase);
-        SetRotation();
     }
 
     public bool GetDashing()
     {
         return dashing;
     }
-
-    bool CheckBossPhase()
-    {
-        float offset = mainCamera.transform.position.z - 125f;
-        if (offset >= 0)
-        {
-            mainCamera.transform.position -= new Vector3(0,0,offset);
-            gameManager.GetComponent<GameManager>().SetBossPhase();
-            return true;
-        }
-
-        return false;
-    }
+    
     void CheckMovement()
     {
         float horizontalSpeed = Input.GetAxis("Horizontal");
@@ -88,27 +89,29 @@ public class DogKnightMovement : MonoBehaviour
     }
     void StayInLine(bool bossPhase)
     {
+        
         // stay in z axis
-        if (transform.position.z < mainCamera.gameObject.transform.position.z - 15)
+        if (transform.position.z > 25)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y,
-                mainCamera.gameObject.transform.position.z - 15);
+            float diff = transform.position.z - 25f;
+            transform.position -= new Vector3(0, 0,diff);
+        }
+        else if (transform.position.z < -25)
+        {
+            float diff = transform.position.z + 25f;
+            transform.position -= new Vector3(0, 0,diff);
         }
         
         // stay in x axis
-        if (transform.position.x > 25)
+        if (transform.position.x > 50)
         {
-            transform.position = new Vector3(25f, transform.position.y, transform.position.z);
+            float diff = transform.position.x - 50f;
+            transform.position -= new Vector3(diff, 0,0);
         }
-        else if (transform.position.x < -25)
+        else if (transform.position.x < -50)
         {
-            transform.position = new Vector3(-25f, transform.position.y, transform.position.z);
-        }
-        // move camera if player moves too far
-        if (transform.position.z > mainCamera.gameObject.transform.position.z && !bossPhase)
-        {
-            mainCamera.gameObject.transform.position = new Vector3(mainCamera.gameObject.transform.position.x,
-                mainCamera.gameObject.transform.position.y, transform.position.z);
+            float diff = transform.position.x + 50f;
+            transform.position -= new Vector3(diff, 0,0);
         }
     }
     void SetRotation()
@@ -132,5 +135,32 @@ public class DogKnightMovement : MonoBehaviour
         }
 
         dashing = false;
+    }
+
+    public void GetHit(float f)
+    {
+        if (!gameObject.GetComponent<DogKnightAction>().getRage())
+        {
+            hp -= f;
+            if (hp <= 0)
+            {
+                hpBar.value = 0;
+                StartCoroutine(DestroySelf());
+            }
+            else
+            {
+                hpBar.value = hp / 20f;
+            }
+        }
+       
+    }
+
+    private IEnumerator DestroySelf()
+    {
+        gameManager.GetComponent<GameManager>().SetGameOver(true);
+        playerAnimator.SetTrigger("die_trig");
+        yield return new WaitForSeconds(1f);
+        gameManager.GetComponent<GameManager>().playDefeat();
+        Destroy(gameObject);
     }
 }

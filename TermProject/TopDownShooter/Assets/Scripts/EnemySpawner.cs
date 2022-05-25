@@ -6,27 +6,23 @@ public class EnemySpawner : MonoBehaviour
 {
     public Camera mainCamera;
     public GameObject[] enemies;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        InvokeRepeating(nameof(SpawnEnemy),2.0f,1.5f);
-    }
+    public GameObject[] effect;
 
     void SpawnEnemy()
     {
-        float xRandom = Random.Range(-20f, 20f);
+        // to make sure that x position will between -50, -10 or 10, 50.
+        float xRandom = Random.Range(10f, 50f);
+        if (Random.Range(0, 2) == 0) xRandom *= -1;
+        float zRandom = Random.Range(-25f,25f);
         int random = Random.Range(0,enemies.Length);
-        GameObject enemy = Instantiate(enemies[random], new Vector3(xRandom, 3f,mainCamera.transform.position.z + 25f), Quaternion.identity);
-        enemy.GetComponent<EnemyMovement>().Initialize(mainCamera);
+        StartCoroutine(EnemyRise(xRandom, zRandom, random));
     }
-    // Update is called once per frame
-    void Update()
+
+    IEnumerator EnemyRise(float x, float z, int type)
     {
-        if (GameObject.FindWithTag("GameController").GetComponent<GameManager>().GetGameOver()  || GameObject.FindWithTag("GameController").GetComponent<GameManager>().GetBossPhase())
-        {
-            CancelInvoke(nameof(SpawnEnemy));
-        }
-        
+        Instantiate(effect[type], new Vector3(x, 3f, z), Quaternion.Euler(new Vector3(-90, 0, 0)));
+        yield return new WaitForSeconds(1f);
+        GameObject enemy = Instantiate(enemies[type], new Vector3(x, 3f,z), Quaternion.identity );
+        if (type < 2) enemy.GetComponent<EnemyMovement>().Initialize(mainCamera);
     }
 }

@@ -11,6 +11,11 @@ TagManager:
   - LockedinBullet
   - Boss
   - SkeletonEnemy
+  - KnightEnemy
+  - DefaultBullet
+  - HpBar
+  - RageBar
+  - SkeletonSummon
   layers:
   - Default
   - TransparentFX

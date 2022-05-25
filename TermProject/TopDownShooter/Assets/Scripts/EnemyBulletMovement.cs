@@ -15,7 +15,7 @@ public class EnemyBulletMovement : MonoBehaviour
     void Update()
     {
         lifeTime -= Time.deltaTime;
-        if (lifeTime < 0  || gameManager.GetComponent<GameManager>().GetBossPhase())
+        if (lifeTime < 0 )
         {
             Destroy(gameObject);
         }
@@ -25,9 +25,8 @@ public class EnemyBulletMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            //gameManager.GetComponent<GameManager>().SetGameOver(true);
+            collision.gameObject.GetComponent<DogKnightMovement>().GetHit(1f);
             Instantiate(explosion, transform.position, Quaternion.identity);
-            //Destroy(collision.gameObject);
             Destroy(gameObject);
         }
     }

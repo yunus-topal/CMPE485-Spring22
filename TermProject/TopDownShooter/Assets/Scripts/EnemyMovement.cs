@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    private float hp = 1f;
+    private GameObject gameManager;
     private Camera mainCamera;
     private float speed = 10f;
     private GameObject player;
@@ -11,10 +13,13 @@ public class EnemyMovement : MonoBehaviour
     public GameObject lockedInBullet;
     private Animator enemyAnimator;
     private bool isDying = false;
-
+    public AudioClip audioClip;
+    AudioSource audioSource;
     public void Initialize(Camera cam)
     {
-        this.mainCamera = cam;
+        audioSource = gameObject.GetComponent<AudioSource>();
+        mainCamera = cam;
+        gameManager = GameObject.FindWithTag("GameController");
         enemyAnimator = gameObject.GetComponent<Animator>();
         player = GameObject.FindWithTag("Player");
         if (gameObject.transform.CompareTag("DefaultEnemy"))
@@ -33,6 +38,7 @@ public class EnemyMovement : MonoBehaviour
         while (!isDying)
         {
             enemyAnimator.SetTrigger("attack_trig");
+            audioSource.PlayOneShot(audioClip);
             yield return new WaitForSeconds(0.25f);
             if(isDying) break;
             GameObject bullet = Instantiate(enemyBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
@@ -46,6 +52,7 @@ public class EnemyMovement : MonoBehaviour
         while (!isDying)
         {
             enemyAnimator.SetTrigger("attack_trig");
+            audioSource.PlayOneShot(audioClip);
             yield return new WaitForSeconds(0.75f);
             if(isDying) break;
             GameObject bullet = Instantiate(lockedInBullet,new Vector3(transform.position.x, 5f, transform.position.z), Quaternion.identity);
@@ -55,7 +62,7 @@ public class EnemyMovement : MonoBehaviour
 
     }
 
-    public IEnumerator DestroySelf()
+    private IEnumerator DestroySelf()
     {
         isDying = true;
         enemyAnimator.SetTrigger("die_trig");
@@ -70,12 +77,9 @@ public class EnemyMovement : MonoBehaviour
         if (gameManager.GetComponent<GameManager>().GetGameOver())
         {
             StopAllCoroutines();
+            return;
         }
-        else if (player.transform.position.z - transform.position.z > 30f  || gameManager.GetComponent<GameManager>().GetBossPhase())
-        {
-            StartCoroutine(DestroySelf());
-        }
-        else
+        if(!isDying)
         {
             // get in the scene and attack player.
             if (transform.position.z > mainCamera.transform.position.z + 15f)
@@ -89,6 +93,15 @@ public class EnemyMovement : MonoBehaviour
         }
 
         
+    }
+    public void TakeDamage(float f)
+    {
+        hp -= f;
+        if (hp <= 0)
+        {
+            StartCoroutine(DestroySelf());
+            gameManager.GetComponent<GameManager>().IncreaseScore(tag);
+        }
     }
     
 }
